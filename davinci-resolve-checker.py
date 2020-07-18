@@ -62,7 +62,7 @@ if found_AMD_GPU:
         if subprocess.getoutput('glxinfo | grep "OpenGL vendor string" | cut -f2 -d":" | xargs') != "Advanced Micro Devices, Inc.":
             print("You are not running AMDGPU-PRO renderer. Install amdgpu-pro-libgl, otherwise you could not use DaVinci Resolve.")
             exit(1)
-        if 'opencl-amdgpu-pro-orca' in installed_opencl_drivers or 'opencl-amdgpu-pro-orca' in installed_opencl_drivers:
+        if 'opencl-amdgpu-pro-orca' in installed_opencl_drivers or 'opencl-amdgpu-pro-pal' in installed_opencl_drivers:
             print("All seems good. You should be able to run DaVinci Resolve successfully.")
     elif chassis_type == 'laptop':
         print("I did not found a working configuration with AMD gpu on laptop yet. Did you?")
