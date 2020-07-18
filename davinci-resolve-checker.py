@@ -6,7 +6,7 @@ import pylspci
 
 print("DaVinci Resolve checker", "1.0.0")
 
-if distro.name() != "Arch Linux":
+if distro.name() not in {"Arch Linux", "Manjaro Linux"}:
     print("You are running", distro.name(), "but this script was only tested for Arch Linux")
     exit(1)
 
