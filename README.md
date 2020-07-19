@@ -10,6 +10,7 @@ It checks GPUs presented in system, checks OpenGL drivers (actual renderer strin
 ## Supported distributions:
 
 * Arch Linux
+* Manjaro Linux
 
 ## Installation:
 
