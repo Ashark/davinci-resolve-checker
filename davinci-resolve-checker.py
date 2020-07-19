@@ -4,7 +4,7 @@ import subprocess
 import re
 import pylspci
 
-print("DaVinci Resolve checker", "1.0.0")
+print("DaVinci Resolve checker", "1.2.0")
 
 if distro.name() != "Arch Linux":
     print("You are running", distro.name(), "but this script was only tested for Arch Linux")
