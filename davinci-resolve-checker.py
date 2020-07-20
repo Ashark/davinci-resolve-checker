@@ -4,7 +4,7 @@ import subprocess
 import re
 import pylspci
 
-print("DaVinci Resolve checker", "1.2.0")
+print("DaVinci Resolve checker", "1.2.1")
 
 if distro.id() not in {"arch", "manjaro"}:
     print("You are running", distro.name(), "but this script was not tested on it.")
@@ -28,12 +28,17 @@ lspci_devices = VerboseParser().run()
 # lspci -d ::0380 - amd secondary gpu on an i+a laptop
 
 found_AMD_GPU = None
+found_INTEL_GPU = None
 found_NVIDIA_GPU = None
 
 for device in lspci_devices:
     if device.cls.id in (0x0300, 0x0301, 0x0302, 0x0380):
-        # if device.vendor.name == 'Intel Corporation':
-        #     print("Found intel gpu")
+        if device.vendor.name == 'Intel Corporation':
+            if found_INTEL_GPU == None:
+                found_INTEL_GPU = device
+            else:
+                print("You have several INTEL GPUs. I am confused. Are you using multi-cpu desktop motherboard?")
+                exit(1)
         if device.vendor.name == 'Advanced Micro Devices, Inc. [AMD/ATI]':
             if found_AMD_GPU == None:
                 found_AMD_GPU = device
@@ -50,9 +55,9 @@ for device in lspci_devices:
 if found_AMD_GPU and found_NVIDIA_GPU:
     print("You have AMD and NVIDIA GPUs. I am confused. Which one do you intend to use?")
     exit(1)
-if not found_AMD_GPU and not found_NVIDIA_GPU:
-    print("You do not have AMD or NVIDIA GPU. You cannot run DaVinci Resolve.")
-    exit(1)
+if not found_AMD_GPU and not found_NVIDIA_GPU and found_INTEL_GPU:
+        print("You have only Intel GPU. Currently DR cannot use intel GPUs for OpenCL. You cannot run DR. See https://forum.blackmagicdesign.com/viewtopic.php?f=21&t=81579")
+        exit(1)
 
 if found_AMD_GPU:
     if chassis_type == 'desktop':
