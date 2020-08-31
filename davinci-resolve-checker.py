@@ -1,10 +1,11 @@
-#!/bin/python
+#!/usr/bin/env python3
+
 import distro
 import subprocess
 import re
 import pylspci
 
-print("DaVinci Resolve checker", "1.3.0")
+print("DaVinci Resolve checker", "1.3.1")
 
 if distro.id() not in {"arch", "manjaro"}:
     print("You are running", distro.name(), "but this script was not tested on it.")
@@ -19,6 +20,10 @@ installed_opencl_drivers = subprocess.getoutput("expac -Qs '%n' opencl-driver").
 from pylspci.parsers import VerboseParser
 lspci_devices = VerboseParser().run()
 
+print("Your configuration:")
+print("Chassis: "+chassis_type)
+print("Installed OpenCL drivers: " + " ".join([str(x) for x in installed_opencl_drivers]))
+
 # Now we are going to check which GPUs are presented in system.
 # According to this link: https://pci-ids.ucw.cz/read/PD/03
 # There are four subclasses in PCI 03xx class
@@ -26,6 +31,10 @@ lspci_devices = VerboseParser().run()
 # lspci -d ::0300 - intel gpu or amd primary gpu
 # lspci -d ::0302 - nvidia 3d controller on an optimus laptop
 # lspci -d ::0380 - amd secondary gpu on an i+a laptop
+
+print("Presented GPUs:")
+print ("\t" + "\n\t".join([ x.device.name + " driver: " + x.driver for x in lspci_devices if x.cls.id in (0x0300, 0x0301, 0x0302, 0x0380) ]))
+print (subprocess.getoutput('glxinfo | grep "OpenGL vendor string"'))
 
 found_AMD_GPU = None
 found_INTEL_GPU = None
