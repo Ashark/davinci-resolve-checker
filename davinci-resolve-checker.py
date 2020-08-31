@@ -4,7 +4,7 @@ import subprocess
 import re
 import pylspci
 
-print("DaVinci Resolve checker", "1.2.1")
+print("DaVinci Resolve checker", "1.3.0")
 
 if distro.id() not in {"arch", "manjaro"}:
     print("You are running", distro.name(), "but this script was not tested on it.")
@@ -67,10 +67,15 @@ if found_AMD_GPU:
         if subprocess.getoutput('glxinfo | grep "OpenGL vendor string" | cut -f2 -d":" | xargs') != "Advanced Micro Devices, Inc.":
             print("You are not running AMDGPU-PRO renderer. Install amdgpu-pro-libgl, otherwise you could not use DaVinci Resolve.")
             exit(1)
-        if 'opencl-amdgpu-pro-orca' in installed_opencl_drivers or 'opencl-amdgpu-pro-pal' in installed_opencl_drivers:
+        if 'opencl-amdgpu-pro-orca' in installed_opencl_drivers or 'opencl-amdgpu-pro-pal' in installed_opencl_drivers or 'opencl-amd' in installed_opencl_drivers:
             print("All seems good. You should be able to run DaVinci Resolve successfully.")
+            exit(0)
+        else:
+            print("You do not have opencl-driver for AMD GPU. Install it, otherwise you could not use DaVinci Resolve.")
+            exit(1)
     elif chassis_type == 'laptop':
         print("I did not found a working configuration with AMD gpu on laptop yet. Did you?")
+        exit(1)
 
 if found_NVIDIA_GPU:
     # I have tested it with D.R. 16.2.3 and found out that BMD have fixed that issue. See https://www.youtube.com/watch?v=NdOGFBHEnkU
