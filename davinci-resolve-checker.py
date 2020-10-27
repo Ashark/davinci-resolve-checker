@@ -5,10 +5,10 @@ import subprocess
 import re
 import pylspci
 
-print("DaVinci Resolve checker", "1.3.1")
+print("DaVinci Resolve checker", "1.3.2")
 
-if distro.id() not in {"arch", "manjaro"}:
-    print("You are running", distro.name(), "but this script was not tested on it.")
+if distro.id() not in {"arch", "manjaro", "endeavouros"}:
+    print("You are running", distro.name(), "(", distro.id(), ") but this script was not tested on it.")
     exit(1)
 
 machine_info = subprocess.check_output(["hostnamectl", "status"], universal_newlines=True)
