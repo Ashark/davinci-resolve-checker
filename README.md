@@ -16,6 +16,7 @@ It checks GPUs presented in system, checks OpenGL drivers (actual renderer strin
 
 * Clone this repository.
 * Install pylspci with pip (because in Arch Linux there is no python-pylspci in AUR yet): `pip install pylspci` 
+* Install distro with pip: `pip install distro` or `sudo pacman -S python-distro`
 * Install `expac`
 
 ## Usage:
