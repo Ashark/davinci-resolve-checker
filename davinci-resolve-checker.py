@@ -5,7 +5,7 @@ import subprocess
 import re
 import pylspci
 
-print("DaVinci Resolve checker", "1.4.0")
+print("DaVinci Resolve checker", "1.4.1")
 
 if distro.id() not in {"arch", "manjaro", "endeavouros"}:
     print("You are running", distro.name(), "(", distro.id(), ") but this script was not tested on it.")
@@ -15,7 +15,7 @@ machine_info = subprocess.check_output(["hostnamectl", "status"], universal_newl
 m = re.search('Chassis: (.+?)\n', machine_info)
 chassis_type = m.group(1)
 
-installed_opencl_drivers = subprocess.getoutput("expac -Qs '%n' opencl-driver").splitlines()
+installed_opencl_drivers = subprocess.check_output("expac -Qs '%n' opencl-driver", shell=True, universal_newlines=True).splitlines()
 
 from pylspci.parsers import VerboseParser
 lspci_devices = VerboseParser().run()
@@ -34,12 +34,16 @@ print("Installed OpenCL drivers: " + " ".join([str(x) for x in installed_opencl_
 print("Presented GPUs:")
 print ("\t" + "\n\t".join([ x.device.name + " (kernel driver in use: " + x.driver + ")" for x in lspci_devices if x.cls.id in (0x0300, 0x0301, 0x0302, 0x0380) ]))
 
-GL_VENDOR = subprocess.getoutput('glxinfo | grep "OpenGL vendor string" | cut -f2 -d":" | xargs')
+GL_VENDOR = subprocess.check_output('glxinfo | grep "OpenGL vendor string" | cut -f2 -d":"', shell=True, text=True).strip()
 print("OpenGL vendor string: " + GL_VENDOR)
 # By GL_VENDOR we can distinguish not only OpenGL Open/Pro implementations, but also a primary GPU in use (kinda).
 # See https://stackoverflow.com/questions/19985131/how-identify-the-primary-video-card-on-linux-programmatically for more information.
 
 print("")  # Empty line, to separate verdict from configuration info.
+
+if GL_VENDOR == "":
+    print("Unable to detect the OpenGL vendor string. Probably, you try to use AMD Pro OpenGL while your primary GPU is Intel.")
+    exit(1)
 
 found_AMD_GPU = None
 found_INTEL_GPU = None
