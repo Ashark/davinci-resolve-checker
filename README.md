@@ -17,7 +17,9 @@ If script detects configuration problem, it suggests how to solve it.
 
 * Clone this repository.
 * Install required dependencies:  
-`sudo pacman -S python-distro python-pylspci expac glxinfo`
+`sudo pacman -S python-distro expac glxinfo`
+* Install other required dependencies from aur (assuming you use yay):  
+`yay -S python-pylspci`
 
 ## Usage:
 
