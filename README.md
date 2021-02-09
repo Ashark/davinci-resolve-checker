@@ -1,6 +1,12 @@
 # DaVinci Resolve Checker
-[![Generic badge](https://img.shields.io/badge/platform-linux-lightgrey.svg)](https://shields.io/)
+[![Generic badge](https://img.shields.io/badge/platform-linux-lightgrey.svg)](https://en.wikipedia.org/wiki/Linux)
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
+
+
+[![davinci-resolve aur version](https://img.shields.io/aur/version/davinci-resolve?label=davinci-resolve)](https://aur.archlinux.org/packages/davinci-resolve)
+[![davinci-resolve-studio aur version](https://img.shields.io/aur/version/davinci-resolve?label=davinci-resolve-studio)](https://aur.archlinux.org/packages/davinci-resolve)
+[![davinci-resolve-beta aur version](https://img.shields.io/aur/version/davinci-resolve?label=davinci-resolve-beta)](https://aur.archlinux.org/packages/davinci-resolve-beta)
+[![davinci-resolve-studio-beta aur version](https://img.shields.io/aur/version/davinci-resolve?label=davinci-resolve-studio-beta)](https://aur.archlinux.org/packages/davinci-resolve-studio-beta)
 
 Check your system configuration and hardware for ability to successfully run DaVinci Resolve.
 
