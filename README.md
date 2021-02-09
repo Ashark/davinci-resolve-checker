@@ -17,9 +17,7 @@ If script detects configuration problem, it suggests how to solve it.
 
 * Clone this repository.
 * Install required dependencies:  
-`sudo pacman -S python-distro expac glxinfo`
-* Install `pylspci` with pip (because in Arch Linux there is no `python-pylspci` in AUR yet):  
-`sudo pacman -S python-pip && pip install pylspci` 
+`sudo pacman -S python-distro python-pylspci expac glxinfo`
 
 ## Usage:
 
