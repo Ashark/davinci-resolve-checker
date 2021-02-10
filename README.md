@@ -5,7 +5,7 @@
 ![checker version](https://img.shields.io/badge/checker_version-1.4.1-green.svg)
 
 [![davinci-resolve aur version](https://img.shields.io/aur/version/davinci-resolve?label=davinci-resolve)](https://aur.archlinux.org/packages/davinci-resolve)
-[![davinci-resolve-studio aur version](https://img.shields.io/aur/version/davinci-resolve-studio?label=davinci-resolve-studio)](https://aur.archlinux.org/packages/davinci-resolve)
+[![davinci-resolve-studio aur version](https://img.shields.io/aur/version/davinci-resolve-studio?label=davinci-resolve-studio)](https://aur.archlinux.org/packages/davinci-resolve-studio)
 [![davinci-resolve-beta aur version](https://img.shields.io/aur/version/davinci-resolve-beta?label=davinci-resolve-beta)](https://aur.archlinux.org/packages/davinci-resolve-beta)
 [![davinci-resolve-studio-beta aur version](https://img.shields.io/aur/version/davinci-resolve-studio-beta?label=davinci-resolve-studio-beta)](https://aur.archlinux.org/packages/davinci-resolve-studio-beta)
 
