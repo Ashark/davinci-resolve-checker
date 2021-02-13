@@ -5,7 +5,7 @@ import subprocess
 import re
 import pylspci
 
-print("DaVinci Resolve checker", "1.4.1")
+print("DaVinci Resolve checker", "1.4.2")
 
 if distro.id() not in {"arch", "manjaro", "endeavouros"}:
     print("You are running", distro.name(), "(", distro.id(), ") but this script was not tested on it.")
@@ -85,7 +85,11 @@ if found_AMD_GPU:
         if found_INTEL_GPU and GL_VENDOR == "Intel":
             print("Your primary gpu is Intel. Go to your uefi settings and set primary display to PCIE. Otherwise you could not use DaVinci Resolve (I did not tested it).")
             exit(1)
-        if GL_VENDOR != "ATI Technologies Inc.":  # Previously, it was "Advanced Micro Devices, Inc.", but seems it changed.
+        if GL_VENDOR != "Advanced Micro Devices, Inc.":
+        # Note: If you run "progl glmark2", you see there "GL_VENDOR:     ATI Technologies Inc.",
+        # but if you run "progl glxinfo", you always get "OpenGL vendor string: Advanced Micro Devices, Inc."
+        # independently of you use X or Wayland; I+A, A+I or just A GPU in system.
+        # So we check if it is "Advanced Micro Devices, Inc.".
             print("You are not using Pro OpenGL implementation. Install amdgpu-pro-libgl, otherwise you could not use DaVinci Resolve.")
             exit(1)
         if 'opencl-amd' not in installed_opencl_drivers and 'opencl-amd-polaris' not in installed_opencl_drivers:
