@@ -5,11 +5,14 @@ import subprocess
 import re
 import pylspci
 
-print("DaVinci Resolve checker", "1.4.2")
+print("DaVinci Resolve checker", "1.4.3")
 
 if distro.id() not in {"arch", "manjaro", "endeavouros"}:
     print("You are running", distro.name(), "(", distro.id(), ") but this script was not tested on it.")
     exit(1)
+
+installed_dr_package = subprocess.run("expac -Qs '%n %v' davinci-resolve", shell=True, capture_output=True, text=True).stdout.rstrip('\n')
+print("Installed DaVinci Resolve package: " + installed_dr_package)
 
 machine_info = subprocess.check_output(["hostnamectl", "status"], universal_newlines=True)
 m = re.search('Chassis: (.+?)\n', machine_info)
