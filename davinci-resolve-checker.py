@@ -5,7 +5,7 @@ import subprocess
 import re
 import pylspci
 
-print("DaVinci Resolve checker", "1.4.3")
+print("DaVinci Resolve checker", "1.4.4")
 
 if distro.id() not in {"arch", "manjaro", "endeavouros"}:
     print("You are running", distro.name(), "(", distro.id(), ") but this script was not tested on it.")
@@ -14,11 +14,12 @@ if distro.id() not in {"arch", "manjaro", "endeavouros"}:
 installed_dr_package = subprocess.run("expac -Qs '%n %v' davinci-resolve", shell=True, capture_output=True, text=True).stdout.rstrip('\n')
 print("Installed DaVinci Resolve package: " + installed_dr_package)
 
-machine_info = subprocess.check_output(["hostnamectl", "status"], universal_newlines=True)
+machine_info = subprocess.check_output(["hostnamectl", "status"], text=True)
 m = re.search('Chassis: (.+?)\n', machine_info)
 chassis_type = m.group(1)
 
-installed_opencl_drivers = subprocess.check_output("expac -Qs '%n' opencl-driver", shell=True, universal_newlines=True).splitlines()
+installed_opencl_drivers = subprocess.check_output("expac -Qs '%n' opencl-driver", shell=True, text=True).splitlines()
+installed_opencl_nvidia_package = subprocess.run("expac -Qs '%n' opencl-nvidia", shell=True, capture_output=True, text=True).stdout.rstrip('\n')
 
 from pylspci.parsers import VerboseParser
 lspci_devices = VerboseParser().run()
@@ -110,8 +111,8 @@ if found_NVIDIA_GPU:
     # So I will keep this comment for a while, then will remove it.
     # if 'opencl-amdgpu-pro-orca' in installed_opencl_drivers or 'opencl-amdgpu-pro-pal' in installed_opencl_drivers or 'opencl-amd' in installed_opencl_drivers:
     #     print("You have installed opencl for amd, but DaVinci Resolve stupidly crashes if it is presented with nvidia gpu. Remove it, otherwise you could not use DaVinci Resolve.")
-    if 'opencl-nvidia' not in installed_opencl_drivers:
-        print("You do not have opencl-nvidia package. Install it, otherwise you could not use DR Even if you are planning to use cuda, opencl-nvidia will be installed as its dependency.")
+    if not installed_opencl_nvidia_package:
+        print("You do not have opencl-nvidia package (or alternative package which provides opencl-nvidia). Install it, otherwise you could not use DR. Even if you are planning to use cuda, opencl-nvidia is its required dependency.")
         exit(1)
     if found_NVIDIA_GPU.driver != 'nvidia':
         print("You are not using nvidia as kernel driver. Use proprietary nvidia driver, otherwise you could not use DaVinci Resolve.")
