@@ -5,7 +5,7 @@ import subprocess
 import re
 import pylspci
 
-print("DaVinci Resolve checker", "1.6.0") # When bumping, do not forget to also bump it in readme.
+print("DaVinci Resolve checker", "1.6.1") # When bumping, do not forget to also bump it in readme.
 
 if distro.id() not in {"arch", "manjaro", "endeavouros"}:
     print("You are running", distro.name(), "(", distro.id(), ") but this script was not tested on it.")
@@ -47,6 +47,10 @@ print("")  # Empty line, to separate verdict from configuration info.
 
 if GL_VENDOR == "":
     print("Unable to detect the OpenGL vendor string. Probably you are trying to use AMD Pro OpenGL while your primary GPU is Intel. Also probably you are launching script via ssh.")
+    exit(1)
+
+if "opencl-mesa" in installed_opencl_drivers:
+    print("You should uninstall opencl-mesa. Otherwise DR (v17.1.1) behaves wrong: image is corrupted. But if you uncheck gpu checkbox in settings and relaunch DR, then even entire desktop session becomes corrupted and you only can reboot your pc. This is observed at least on amd gpu.")
     exit(1)
 
 found_AMD_GPU = None
