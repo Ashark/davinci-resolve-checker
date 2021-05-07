@@ -5,7 +5,7 @@ import subprocess
 import re
 import pylspci
 
-print("DaVinci Resolve checker", "1.5.0")
+print("DaVinci Resolve checker", "1.6.0") # When bumping, do not forget to also bump it in readme.
 
 if distro.id() not in {"arch", "manjaro", "endeavouros"}:
     print("You are running", distro.name(), "(", distro.id(), ") but this script was not tested on it.")
@@ -90,33 +90,38 @@ if not found_AMD_GPU and not found_NVIDIA_GPU and found_INTEL_GPU:
         exit(1)
 
 if found_AMD_GPU:
-    if 'amdgpu' in found_AMD_GPU.kernel_modules and 'radeon' in found_AMD_GPU.kernel_modules and found_AMD_GPU.driver == 'radeon':
-        print("You are currently using radeon driver. Switch to amdgpu as described here: https://wiki.archlinux.org/title/AMDGPU#Enable_Southern_Islands_(SI)_and_Sea_Islands_(CIK)_support. Otherwise you could not run DaVinci Resolve.")
-        exit(1)
-
-    if chassis_type == 'desktop':
-        if found_AMD_GPU.driver != 'amdgpu':
-            print("You are not using amdgpu driver. Your gpu is probably too old and not supported. You cannot run DaVinci Resolve.")
+    if found_INTEL_GPU:
+        if chassis_type == 'laptop':
+            print("I did not found a working configuration yet for laptops with Intel + AMD graphics. Did you?")
             exit(1)
-        if found_INTEL_GPU and GL_VENDOR == "Intel":
+        elif GL_VENDOR == "Intel":
             print("Your primary gpu is Intel. Go to your uefi settings and set primary display to PCIE. Otherwise you could not use DaVinci Resolve (I did not tested it).")
             exit(1)
-        if GL_VENDOR != "Advanced Micro Devices, Inc.":
+
+    if found_AMD_GPU.driver != 'amdgpu':
+        if found_AMD_GPU.driver == 'radeon':
+            if 'amdgpu' in found_AMD_GPU.kernel_modules and 'radeon' in found_AMD_GPU.kernel_modules:
+                print("You are currently using radeon driver. Switch to amdgpu as described here: https://wiki.archlinux.org/title/AMDGPU#Enable_Southern_Islands_(SI)_and_Sea_Islands_(CIK)_support. Otherwise you could not run DaVinci Resolve.")
+                exit(1)
+            else:
+                print("Your gpu only supports radeon driver. DaVinci Resolve requires amdgpu progl, which can only work with amdgpu driver. You cannot run DaVinci Resolve.")
+        print("For some reason, you are not running amdgpu driver. You cannot run DaVinci Resolve.")
+        exit(1)
+
+    if GL_VENDOR != "Advanced Micro Devices, Inc.":
         # Note: If you run "progl glmark2", you see there "GL_VENDOR:     ATI Technologies Inc.",
         # but if you run "progl glxinfo", you always get "OpenGL vendor string: Advanced Micro Devices, Inc."
-        # independently of you use X or Wayland; I+A, A+I or just A GPU in system.
+        # independently of you use X or Wayland; I+A, A+I or just AMD gpu in system.
         # So we check if it is "Advanced Micro Devices, Inc.".
-            print("You are not using Pro OpenGL implementation. Install amdgpu-pro-libgl and run DaVinci Resolve with progl prefix. Otherwise it will crash.")
-            exit(1)
-        if 'opencl-amd' not in installed_opencl_drivers and 'opencl-amd-polaris' not in installed_opencl_drivers:
-            print("You do not have opencl-driver for AMD GPU. Install it, otherwise you could not use DaVinci Resolve.")
-            exit(1)
-        else:
-            print("All seems good. You should be able to run DaVinci Resolve successfully.")
-            # exit(0)
-    elif chassis_type == 'laptop':
-        print("I did not found a working configuration with AMD gpu on laptop yet. Did you?")
+        print("You are not using Pro OpenGL implementation. Install amdgpu-pro-libgl and run DaVinci Resolve with progl prefix. Otherwise it will crash.")
         exit(1)
+
+    if 'opencl-amd' not in installed_opencl_drivers and 'opencl-amd-polaris' not in installed_opencl_drivers:
+        print("You do not have opencl-driver for AMD GPU. Install it, otherwise you could not use DaVinci Resolve.")
+        exit(1)
+    else:
+        print("All seems good. You should be able to run DaVinci Resolve successfully.")
+        # exit(0)
 
 if found_NVIDIA_GPU:
     # I have tested it with DR 16.2.3 and found out that BMD have fixed that issue. See https://www.youtube.com/watch?v=NdOGFBHEnkU
