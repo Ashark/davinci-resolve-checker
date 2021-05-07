@@ -5,7 +5,7 @@ import subprocess
 import re
 import pylspci
 
-print("DaVinci Resolve checker", "1.4.4")
+print("DaVinci Resolve checker", "1.5.0")
 
 if distro.id() not in {"arch", "manjaro", "endeavouros"}:
     print("You are running", distro.name(), "(", distro.id(), ") but this script was not tested on it.")
@@ -46,7 +46,7 @@ print("OpenGL vendor string: " + GL_VENDOR)
 print("")  # Empty line, to separate verdict from configuration info.
 
 if GL_VENDOR == "":
-    print("Unable to detect the OpenGL vendor string. Probably, you try to use AMD Pro OpenGL while your primary GPU is Intel.")
+    print("Unable to detect the OpenGL vendor string. Probably you are trying to use AMD Pro OpenGL while your primary GPU is Intel. Also probably you are launching script via ssh.")
     exit(1)
 
 found_AMD_GPU = None
@@ -75,16 +75,28 @@ for device in lspci_devices:
                 exit(1)
 
 if found_AMD_GPU and found_NVIDIA_GPU:
-    print("You have AMD and NVIDIA GPUs. I am confused. Which one do you intend to use?")
-    exit(1)
+    if found_AMD_GPU.driver != "vfio-pci" and found_NVIDIA_GPU.driver != "vfio-pci":
+        print("You have AMD and NVIDIA GPUs. I am confused. Which one do you intend to use?")
+        exit(1)
+    elif found_AMD_GPU.driver == "vfio-pci":
+        print("Your amd gpu is binded to vfio-pci, dropping it from further checking.")
+        found_AMD_GPU = None
+    elif found_NVIDIA_GPU.driver == "vfio-pci":
+        print("Your nvidia gpu is binded to vfio-pci, dropping it from further checking.")
+        found_NVIDIA_GPU = None
+
 if not found_AMD_GPU and not found_NVIDIA_GPU and found_INTEL_GPU:
         print("You have only Intel GPU. Currently DR cannot use intel GPUs for OpenCL. You cannot run DR. See https://forum.blackmagicdesign.com/viewtopic.php?f=21&t=81579")
         exit(1)
 
 if found_AMD_GPU:
+    if 'amdgpu' in found_AMD_GPU.kernel_modules and 'radeon' in found_AMD_GPU.kernel_modules and found_AMD_GPU.driver == 'radeon':
+        print("You are currently using radeon driver. Switch to amdgpu as described here: https://wiki.archlinux.org/title/AMDGPU#Enable_Southern_Islands_(SI)_and_Sea_Islands_(CIK)_support. Otherwise you could not run DaVinci Resolve.")
+        exit(1)
+
     if chassis_type == 'desktop':
         if found_AMD_GPU.driver != 'amdgpu':
-            print("You are not using amdgpu as kernel driver. Set radeon.si/cik_support=0 and amdgpu.si/cik_support=1 kernel parameters, otherwise you could not use DaVinci Resolve.")
+            print("You are not using amdgpu driver. Your gpu is probably too old and not supported. You cannot run DaVinci Resolve.")
             exit(1)
         if found_INTEL_GPU and GL_VENDOR == "Intel":
             print("Your primary gpu is Intel. Go to your uefi settings and set primary display to PCIE. Otherwise you could not use DaVinci Resolve (I did not tested it).")
@@ -94,14 +106,14 @@ if found_AMD_GPU:
         # but if you run "progl glxinfo", you always get "OpenGL vendor string: Advanced Micro Devices, Inc."
         # independently of you use X or Wayland; I+A, A+I or just A GPU in system.
         # So we check if it is "Advanced Micro Devices, Inc.".
-            print("You are not using Pro OpenGL implementation. Install amdgpu-pro-libgl, otherwise you could not use DaVinci Resolve.")
+            print("You are not using Pro OpenGL implementation. Install amdgpu-pro-libgl and run DaVinci Resolve with progl prefix. Otherwise it will crash.")
             exit(1)
         if 'opencl-amd' not in installed_opencl_drivers and 'opencl-amd-polaris' not in installed_opencl_drivers:
             print("You do not have opencl-driver for AMD GPU. Install it, otherwise you could not use DaVinci Resolve.")
             exit(1)
         else:
             print("All seems good. You should be able to run DaVinci Resolve successfully.")
-            exit(0)
+            # exit(0)
     elif chassis_type == 'laptop':
         print("I did not found a working configuration with AMD gpu on laptop yet. Did you?")
         exit(1)
