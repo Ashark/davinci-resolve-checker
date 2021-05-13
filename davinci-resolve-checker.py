@@ -5,7 +5,7 @@ import subprocess
 import re
 import pylspci
 
-print("DaVinci Resolve checker", "1.6.1") # When bumping, do not forget to also bump it in readme.
+print("DaVinci Resolve checker", "1.6.2") # When bumping, do not forget to also bump it in readme.
 
 if distro.id() not in {"arch", "manjaro", "endeavouros"}:
     print("You are running", distro.name(), "(", distro.id(), ") but this script was not tested on it.")
@@ -82,12 +82,13 @@ if found_AMD_GPU and found_NVIDIA_GPU:
     if found_AMD_GPU.driver != "vfio-pci" and found_NVIDIA_GPU.driver != "vfio-pci":
         print("You have AMD and NVIDIA GPUs. I am confused. Which one do you intend to use?")
         exit(1)
-    elif found_AMD_GPU.driver == "vfio-pci":
-        print("Your amd gpu is binded to vfio-pci, dropping it from further checking.")
-        found_AMD_GPU = None
-    elif found_NVIDIA_GPU.driver == "vfio-pci":
-        print("Your nvidia gpu is binded to vfio-pci, dropping it from further checking.")
-        found_NVIDIA_GPU = None
+    else:
+        if found_AMD_GPU.driver == "vfio-pci":
+            print("Your amd gpu is binded to vfio-pci, dropping it from further checking.")
+            found_AMD_GPU = None
+        if found_NVIDIA_GPU.driver == "vfio-pci":
+            print("Your nvidia gpu is binded to vfio-pci, dropping it from further checking.")
+            found_NVIDIA_GPU = None
 
 if not found_AMD_GPU and not found_NVIDIA_GPU and found_INTEL_GPU:
         print("You have only Intel GPU. Currently DR cannot use intel GPUs for OpenCL. You cannot run DR. See https://forum.blackmagicdesign.com/viewtopic.php?f=21&t=81579")
