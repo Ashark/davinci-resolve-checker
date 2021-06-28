@@ -50,7 +50,7 @@ if GL_VENDOR == "":
     exit(1)
 
 if "opencl-mesa" in installed_opencl_drivers:
-    print("您需要卸载opencl-mesa，否则达芬奇(v17.1.1)将无法运行: 镜像已损坏。但是如果您在设置中反选gpu复选框然后重新启动达芬奇，那么甚至整个桌面会话都可能会损坏，您只能重新启动您的电脑。 至少在AMD显卡上可以观察到这一点。")
+    print("您需要卸载opencl-mesa，否则达芬奇(v17.1.1)将无法运行: 镜像已损坏。但是如果您在设置中反选gpu复选框然后重新启动达芬奇，那么可能会导致整个桌面会话都会损坏，您只能重新启动您的电脑。 至少在AMD显卡上可以观察到这一点。")
     exit(1)
 
 found_AMD_GPU = None
@@ -63,24 +63,24 @@ for device in lspci_devices:
             if found_INTEL_GPU == None:
                 found_INTEL_GPU = device
             else:
-                print("检测到您有多个INTEL显卡。我很困惑。您是否在使用多CPU台式机主板？还是intel igpu + intel dgpu（在编写本程序的时候不存在这一现象）？")
+                print("检测到您有多个INTEL显卡。您是否在使用多CPU台式机主板？还是intel igpu + intel dgpu（在编写本程序的时候尚未发现这一现象）？")
                 exit(1)
         if device.vendor.name == 'Advanced Micro Devices, Inc. [AMD/ATI]':
             if found_AMD_GPU == None:
                 found_AMD_GPU = device
             else:
-                print("检测到您有多个AMD显卡。我很困惑。您准备使用哪一个？")
+                print("检测到您有多个AMD显卡。您准备使用哪一个？")
                 exit(1)
         if device.vendor.name == 'NVIDIA Corporation':
             if found_NVIDIA_GPU == None:
                 found_NVIDIA_GPU = device
             else:
-                print("检测到您有多个NVIDIA显卡。我很困惑。您准备使用哪一个？")
+                print("检测到您有多个NVIDIA显卡。您准备使用哪一个？")
                 exit(1)
 
 if found_AMD_GPU and found_NVIDIA_GPU:
     if found_AMD_GPU.driver != "vfio-pci" and found_NVIDIA_GPU.driver != "vfio-pci":
-        print("检测到您有AMD和NVIDIA显卡。我很困惑。？您准备使用哪一个")
+        print("检测到您有AMD和NVIDIA显卡。您准备使用哪一个？")
         exit(1)
     else:
         if found_AMD_GPU.driver == "vfio-pci":
