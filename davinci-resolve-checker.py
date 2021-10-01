@@ -7,7 +7,7 @@ import pylspci
 
 print("DaVinci Resolve checker", "1.6.2") # When bumping, do not forget to also bump it in readme.
 
-if distro.id() not in {"arch", "manjaro", "endeavouros"}:
+if distro.id() not in {"arch", "manjaro", "endeavouros", "garuda"}:
     print("You are running", distro.name(), "(", distro.id(), ") but this script was not tested on it.")
     exit(1)
 
@@ -36,7 +36,7 @@ print("Installed OpenCL drivers: " + " ".join([str(x) for x in installed_opencl_
 # lspci -d ::0380 - amd secondary gpu on an i+a laptop
 
 print("Presented GPUs:")
-print ("\t" + "\n\t".join([ x.device.name + " (kernel driver in use: " + x.driver + ")" for x in lspci_devices if x.cls.id in (0x0300, 0x0301, 0x0302, 0x0380) ]))
+print ("\t" + "\n\t".join([ str(x.device.name) + " (kernel driver in use: " + str(x.driver) + ")" for x in lspci_devices if x.cls.id in (0x0300, 0x0301, 0x0302, 0x0380) ]))
 
 GL_VENDOR = subprocess.check_output('glxinfo | grep "OpenGL vendor string" | cut -f2 -d":"', shell=True, text=True).strip()
 print("OpenGL vendor string: " + GL_VENDOR)
