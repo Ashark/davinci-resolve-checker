@@ -24,7 +24,7 @@ print(local_str["locale"], local_str.locale)
 print(local_str["project name"], "1.6.2") # When bumping, do not forget to also bump it in readme.
 
 if distro.id() not in {"arch", "manjaro", "endeavouros"}:
-    print(local_str["you are running"], distro.name(), "(", distro.id(), ")", local["script not tested on distro"])
+    print(local_str["you are running"], distro.name(), "(", distro.id(), ")", local_str["script not tested on distro"])
     exit(1)
 
 installed_dr_package = subprocess.run("expac -Qs '%n %v' davinci-resolve", shell=True, capture_output=True, text=True).stdout.rstrip('\n')
