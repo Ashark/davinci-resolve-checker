@@ -11,7 +11,12 @@ class LocalStrings(dict):
     def __init__(self, preferred_locale: Optional[str] = None) -> None:
         self.locale: str = preferred_locale or locale.getdefaultlocale()[0]
 
-        self.local: dict = importlib.import_module(f'languages.{self.locale}').local_str
+        try:
+            self.local: dict = importlib.import_module(f'languages.{self.locale}').local_str
+        except ModuleNotFoundError:
+            print(f'Locale unavailable: {self.locale}, using {DEFAULT_LOCALE} instead')
+            self.locale = DEFAULT_LOCALE
+            self.local = importlib.import_module(f'languages.{DEFAULT_LOCALE}').local_str
 
     def __getitem__(self, key: str) -> str:
         return self.local[key]

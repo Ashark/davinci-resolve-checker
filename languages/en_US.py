@@ -1,4 +1,4 @@
-local = {
+local_str = {
     "locale": "Using locale",
     "project name": "DaVinci Resolve checker",
     "you are running": "You are running",
