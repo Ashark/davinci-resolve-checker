@@ -78,3 +78,7 @@ Currently, this script displays messages in these locales:
 To contribute translating the script, add a locale file to the `languages/` directory. Use the `en_US.py` file as a reference.
 
 The name of your file should match exactly the locale identification. For example, if you were to implement translation to French, France, you'd have a `languages/fr_FR.py` file.
+
+After implementing the translation, run `python -m unittest` to certify everything is in order.
+
+If you see any errors, it means your translation dictionary `local_str` has misconfigured keys. Double check against the `en_US.py` file, or open an issue if you need assistance.
