@@ -52,7 +52,7 @@ print(local_str["openCL drivers"], " ".join([str(x) for x in installed_opencl_dr
 # lspci -d ::0380 - amd secondary gpu on an i+a laptop
 
 print(local_str["presented gpus"])
-print ("\t" + "\n\t".join([ x.device.name + " (" + local_str["kernel driver"] + x.driver + ")" for x in lspci_devices if x.cls.id in (0x0300, 0x0301, 0x0302, 0x0380) ]))
+print ("\t" + "\n\t".join([ x.device.name + " (" + local_str["kernel driver"] + " " + x.driver + ")" for x in lspci_devices if x.cls.id in (0x0300, 0x0301, 0x0302, 0x0380) ]))
 
 GL_VENDOR = subprocess.check_output('glxinfo | grep "OpenGL vendor string" | cut -f2 -d":"', shell=True, text=True).strip()
 print(local_str["opengl vendor"], GL_VENDOR)
