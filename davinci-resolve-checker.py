@@ -1,18 +1,34 @@
 #!/usr/bin/env python3
 
+import argparse
 import distro
-import subprocess
 import re
+import subprocess
+
+import local_strings
 import pylspci
 
-print("DaVinci Resolve checker", "1.6.2") # When bumping, do not forget to also bump it in readme.
+
+parser = argparse.ArgumentParser(description="Davinci Resolve checker")
+parser.add_argument(
+    "-l", "--locale",
+    help="Locale for messages print by the checker, e.g. 'en_US'",
+    dest='locale'
+)
+args = parser.parse_args()
+
+local_str = local_strings.LocalStrings(preferred_locale=args.locale)
+
+print(local_str["locale"], local_str.locale)
+
+print(local_str["project name"], "1.6.2") # When bumping, do not forget to also bump it in readme.
 
 if distro.id() not in {"arch", "manjaro", "endeavouros"}:
-    print("You are running", distro.name(), "(", distro.id(), ") but this script was not tested on it.")
+    print(local_str["you are running"], distro.name(), "(", distro.id(), ")", local["script not tested on distro"])
     exit(1)
 
 installed_dr_package = subprocess.run("expac -Qs '%n %v' davinci-resolve", shell=True, capture_output=True, text=True).stdout.rstrip('\n')
-print("Installed DaVinci Resolve package: " + installed_dr_package)
+print(local_str["which DR package"], installed_dr_package)
 
 machine_info = subprocess.check_output(["hostnamectl", "status"], text=True)
 m = re.search('Chassis: (.+?)\n', machine_info)
@@ -24,8 +40,8 @@ installed_opencl_nvidia_package = subprocess.run("expac -Qs '%n' opencl-nvidia",
 from pylspci.parsers import VerboseParser
 lspci_devices = VerboseParser().run()
 
-print("Chassis type: " + chassis_type)
-print("Installed OpenCL drivers: " + " ".join([str(x) for x in installed_opencl_drivers]))
+print(local_str["chassis"], chassis_type)
+print(local_str["openCL drivers"], " ".join([str(x) for x in installed_opencl_drivers]))
 
 # Now we are going to check which GPUs are presented in system.
 # According to this link: https://pci-ids.ucw.cz/read/PD/03
