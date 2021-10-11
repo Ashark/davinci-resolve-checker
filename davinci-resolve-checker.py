@@ -40,7 +40,7 @@ installed_opencl_nvidia_package = subprocess.run("expac -Qs '%n' opencl-nvidia",
 from pylspci.parsers import VerboseParser
 lspci_devices = VerboseParser().run()
 
-print(local_str["chassis"], chassis_type)
+print(local_str["chassis"], local_str[chassis_type])
 print(local_str["openCL drivers"], " ".join([str(x) for x in installed_opencl_drivers]))
 
 # Now we are going to check which GPUs are presented in system.

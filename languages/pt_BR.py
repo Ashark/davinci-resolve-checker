@@ -5,14 +5,14 @@ local_str = {
     "script not tested on distro": "mas este script não foi testado nele.",
     "which DR package": "Pacote DaVinci Resolve instalado:",
     "chassis": "Tipo de Chassi:",
+    "laptop": "computador portátil",
+    "desktop": "computador de mesa",
     "openCL drivers": "Drivers OpenCL instalados:",
     "presented gpus": "GPUs apresentadas:",
     "kernel driver": "Driver do Kernel em uso:",
     "opengl vendor": "String do fornecedor OpenGL:",
     "missing opengl vendor": "Não foi possível detectar string do fornecedor OpenGL. Provavelmente você está tentando usar AMD Pro OpenGL enquanto sua GPU principal é Intel. Além disso, provavelmente você está executando este script via ssh.",
     "should uninstall opencl-mesa": "Você precisa desinstalar o opencl-mesa. Do contrário, Davinci Resolve (v17.1.1) se comporta com erro: imagem está corrompida. Mas se você desmarcar a caixa de seleção em configurações e reiniciar o Davinci Resolve, então toda a sua sessão desktop pode ficar corrompida e somente reiniciando a máquina irá resolver. Este comportamento é observado ao menos em GPU AMD.",
-    
-    # Pending
     "several intel gpus": "Você tem várias GPUs Intel. Estou confuso. Você está usando uma placa-mãe com múltiplas CPUs? Ou iGPU Intel + dGPU Intel (o que não existia até o momento que isto foi escrito)?",
     "several amd gpus": "Você tem várias GPUs AMD. Estou confuso, qual delas pretende usar?",
     "several nvidia gpus": "Você tem várias GPUs NVIDIA. Estou confuso, qual delas pretende usar?",

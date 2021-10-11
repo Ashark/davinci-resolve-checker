@@ -5,6 +5,8 @@ local_str = {
     "script not tested on distro": "but this script was not tested on it.",
     "which DR package": "Installed DaVinci Resolve package:",
     "chassis": "Chassis type:",
+    "laptop": "laptop",
+    "desktop": "desktop",
     "openCL drivers": "Installed OpenCL drivers:",
     "presented gpus": "Presented GPUs:",
     "kernel driver": "kernel driver in use:",
