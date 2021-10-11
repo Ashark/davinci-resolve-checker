@@ -1,10 +1,7 @@
 import importlib
 import pkgutil
 import re
-import sys
 import unittest
-
-sys.path.append('.')
 
 import languages
 import languages.en_US
