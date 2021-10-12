@@ -2,7 +2,7 @@
 [![platform](https://img.shields.io/badge/platform-linux-lightgrey.svg)](https://en.wikipedia.org/wiki/Linux)
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
 ![license](https://img.shields.io/github/license/Ashark/davinci-resolve-checker.svg)
-![checker version](https://img.shields.io/badge/checker_version-2.0.0-green.svg)
+![checker version](https://img.shields.io/badge/checker_version-2.0.1-green.svg)
 
 [![davinci-resolve aur version](https://img.shields.io/aur/version/davinci-resolve?label=davinci-resolve)](https://aur.archlinux.org/packages/davinci-resolve)
 [![davinci-resolve-studio aur version](https://img.shields.io/aur/version/davinci-resolve-studio?label=davinci-resolve-studio)](https://aur.archlinux.org/packages/davinci-resolve-studio)
@@ -73,6 +73,7 @@ Currently, this script displays messages in these locales:
 
 * `en_US` - English, United States
 * `pt_BR` - Portiguese, Brazil
+* `ru_RU` - Russian, Russian Federation
 * `zh_CN` - Chinese, Simplified
 
 To contribute translating the script, add a locale file to the `languages/` directory. Use the `en_US.py` file as a reference.
