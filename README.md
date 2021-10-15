@@ -22,8 +22,9 @@ If script detects configuration problem, it suggests how to solve it.
 ## Supported distributions:
 
 * Arch Linux
-* Manjaro Linux
 * EndeavourOS
+* Garuda Linux
+* Manjaro Linux
 
 ## Installation:
 
