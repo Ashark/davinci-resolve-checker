@@ -2,12 +2,9 @@
 
 import argparse
 import distro
-import re
 import subprocess
-
 import local_strings
-import pylspci
-
+from pylspci.parsers import VerboseParser
 
 parser = argparse.ArgumentParser(description="Davinci Resolve checker")
 parser.add_argument(
@@ -21,7 +18,7 @@ local_str = local_strings.LocalStrings(preferred_locale=args.locale)
 
 print(local_str["locale"], local_str.locale)
 
-print(local_str["project name"], "2.0.1") # When bumping, do not forget to also bump it in readme.
+print(local_str["project name"], "2.1.0")  # When bumping, do not forget to also bump it in readme.
 
 if distro.id() not in {"arch", "manjaro", "endeavouros"}:
     print(local_str["you are running"], distro.name(), "(", distro.id(), ")", local_str["script not tested on distro"])
@@ -30,14 +27,39 @@ if distro.id() not in {"arch", "manjaro", "endeavouros"}:
 installed_dr_package = subprocess.run("expac -Qs '%n %v' davinci-resolve", shell=True, capture_output=True, text=True).stdout.rstrip('\n')
 print(local_str["which DR package"], installed_dr_package)
 
-machine_info = subprocess.check_output(["hostnamectl", "status"], text=True)
-m = re.search("Chassis: (.+?)\n", machine_info)
-chassis_type = m.group(1)
+chassis_types = {
+    "1": "Other",
+    "2": "Unknown",
+    "3": "Desktop",
+    "4": "Low Profile Desktop",
+    "5": "Pizza Box",
+    "6": "Mini Tower",
+    "7": "Tower",
+    "8": "Portable",
+    "9": "Laptop",
+    "10": "Notebook",
+    "11": "Hand Held",
+    "12": "Docking Station",
+    "13": "All in One",
+    "14": "Sub Notebook",
+    "15": "Space-Saving",
+    "16": "Lunch Box",
+    "17": "Main System Chassis",
+    "18": "Expansion Chassis",
+    "19": "SubChassis",
+    "20": "Bus Expansion Chassis",
+    "21": "Peripheral Chassis",
+    "22": "Storage Chassis",
+    "23": "Rack Mount Chassis",
+    "24": "Sealed-Case PC"
+}
+
+with open("/sys/class/dmi/id/chassis_type", 'r') as file:
+    chassis_type = chassis_types[file.read().rstrip()]
 
 installed_opencl_drivers = subprocess.check_output("expac -Qs '%n' opencl-driver", shell=True, text=True).splitlines()
 installed_opencl_nvidia_package = subprocess.run("expac -Qs '%n' opencl-nvidia", shell=True, capture_output=True, text=True).stdout.rstrip('\n')
 
-from pylspci.parsers import VerboseParser
 lspci_devices = VerboseParser().run()
 
 print(local_str["chassis"], local_str[chassis_type])
@@ -52,7 +74,7 @@ print(local_str["openCL drivers"], " ".join([str(x) for x in installed_opencl_dr
 # lspci -d ::0380 - amd secondary gpu on an i+a laptop
 
 print(local_str["presented gpus"])
-print ("\t" + "\n\t".join([ x.device.name + " (" + local_str["kernel driver"] + " " + x.driver + ")" for x in lspci_devices if x.cls.id in (0x0300, 0x0301, 0x0302, 0x0380) ]))
+print("\t" + "\n\t".join([x.device.name + " (" + local_str["kernel driver"] + " " + x.driver + ")" for x in lspci_devices if x.cls.id in (0x0300, 0x0301, 0x0302, 0x0380)]))
 
 GL_VENDOR = subprocess.check_output('glxinfo | grep "OpenGL vendor string" | cut -f2 -d":"', shell=True, text=True).strip()
 print(local_str["opengl vendor"], GL_VENDOR)
@@ -107,12 +129,12 @@ if found_AMD_GPU and found_NVIDIA_GPU:
             found_NVIDIA_GPU = None
 
 if not found_AMD_GPU and not found_NVIDIA_GPU and found_INTEL_GPU:
-        print(local_str["only intel gpu, cannot run DR"])
-        exit(1)
+    print(local_str["only intel gpu, cannot run DR"])
+    exit(1)
 
 if found_AMD_GPU:
     if found_INTEL_GPU:
-        if chassis_type == 'laptop':
+        if chassis_type == 'Laptop':
             print(local_str["mixed intel and amd gpus"])
             exit(1)
         elif GL_VENDOR == "Intel":
