@@ -20,7 +20,7 @@ print(local_str["locale"], local_str.locale)
 
 print(local_str["project name"], "2.1.0")  # When bumping, do not forget to also bump it in readme.
 
-if distro.id() not in {"arch", "manjaro", "endeavouros"}:
+if distro.id() not in {"arch", "manjaro", "endeavouros", "garuda"}:
     print(local_str["you are running"], distro.name(), "(", distro.id(), ")", local_str["script not tested on distro"])
     exit(1)
 
