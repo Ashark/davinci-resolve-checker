@@ -18,7 +18,7 @@ local_str = local_strings.LocalStrings(preferred_locale=args.locale)
 
 print(local_str["locale"], local_str.locale)
 
-print(local_str["project name"], "2.1.1")  # When bumping, do not forget to also bump it in readme.
+print(local_str["project name"], "2.2.0")  # When bumping, do not forget to also bump it in readme.
 
 if distro.id() not in {"arch", "manjaro", "endeavouros", "garuda"}:
     print(local_str["you are running"], distro.name(), "(", distro.id(), ")", local_str["script not tested on distro"])
@@ -28,6 +28,7 @@ installed_dr_package = subprocess.run("expac -Qs '%n %v' davinci-resolve", shell
 print(local_str["which DR package"], installed_dr_package)
 
 chassis_types = {
+    # Taken from spec 3.5.0, see here: https://superuser.com/a/1107191/873855
     "1": "Other",
     "2": "Unknown",
     "3": "Desktop",
@@ -42,16 +43,28 @@ chassis_types = {
     "12": "Docking Station",
     "13": "All in One",
     "14": "Sub Notebook",
-    "15": "Space-Saving",
+    "15": "Space-saving",
     "16": "Lunch Box",
-    "17": "Main System Chassis",
+    "17": "Main Server Chassis",
     "18": "Expansion Chassis",
     "19": "SubChassis",
     "20": "Bus Expansion Chassis",
     "21": "Peripheral Chassis",
-    "22": "Storage Chassis",
+    "22": "RAID Chassis",
     "23": "Rack Mount Chassis",
-    "24": "Sealed-Case PC"
+    "24": "Sealed-case PC",
+    "25": "Multi-system chassis",
+    "26": "Compact PCI",
+    "27": "Advanced TCA",
+    "28": "Blade",
+    "29": "Blade Enclosure",
+    "30": "Tablet",
+    "31": "Convertible",
+    "32": "Detachable",
+    "33": "IoT Gateway",
+    "34": "Embedded PC",
+    "35": "Mini PC",
+    "36": "Stick PC"
 }
 
 with open("/sys/class/dmi/id/chassis_type", 'r') as file:
@@ -63,6 +76,9 @@ installed_opencl_nvidia_package = subprocess.run("expac -Qs '%n' opencl-nvidia",
 lspci_devices = VerboseParser().run()
 
 print(local_str["chassis"], local_str[chassis_type])
+supported_chassis_types = ["Desktop", "Notebook"]
+if chassis_type not in supported_chassis_types:
+    print(local_str["unsupported chassis"])
 print(local_str["openCL drivers"], " ".join([str(x) for x in installed_opencl_drivers]))
 
 # Now we are going to check which GPUs are presented in system.
@@ -134,7 +150,7 @@ if not found_AMD_GPU and not found_NVIDIA_GPU and found_INTEL_GPU:
 
 if found_AMD_GPU:
     if found_INTEL_GPU:
-        if chassis_type == 'Laptop':
+        if chassis_type == 'Notebook':
             print(local_str["mixed intel and amd gpus"])
             exit(1)
         elif GL_VENDOR == "Intel":
