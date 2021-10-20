@@ -2,7 +2,7 @@
 [![platform](https://img.shields.io/badge/platform-linux-lightgrey.svg)](https://en.wikipedia.org/wiki/Linux)
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
 ![license](https://img.shields.io/github/license/Ashark/davinci-resolve-checker.svg)
-![checker version](https://img.shields.io/badge/checker_version-2.2.0-green.svg)
+![checker version](https://img.shields.io/badge/checker_version-2.3.0-green.svg)
 
 [![davinci-resolve aur version](https://img.shields.io/aur/version/davinci-resolve?label=davinci-resolve)](https://aur.archlinux.org/packages/davinci-resolve)
 [![davinci-resolve-studio aur version](https://img.shields.io/aur/version/davinci-resolve-studio?label=davinci-resolve-studio)](https://aur.archlinux.org/packages/davinci-resolve-studio)
@@ -30,7 +30,7 @@ If script detects configuration problem, it suggests how to solve it.
 
 * Clone this repository.
 * Install required dependencies:  
-`sudo pacman -S python-distro expac glxinfo`
+`sudo pacman -S expac mesa-demos python-distro`
 * Install other required dependencies from aur (assuming you use yay):  
 `yay -S python-pylspci`
 
