@@ -19,7 +19,7 @@ local_str = local_strings.LocalStrings(preferred_locale=args.locale)
 
 print(local_str["locale"], local_str.locale)
 
-print(local_str["project name"], "2.4.0")  # When bumping, do not forget to also bump it in readme.
+print(local_str["project name"], "2.4.1")  # When bumping, do not forget to also bump it in readme.
 
 if distro.id() not in {"arch", "manjaro", "endeavouros", "garuda"}:
     print(local_str["you are running"], distro.name(), "(", distro.id(), ")", local_str["script not tested on distro"])
@@ -79,7 +79,7 @@ with open("/sys/class/dmi/id/chassis_type", 'r') as file:
 installed_opencl_drivers = subprocess.check_output("expac -Qs '%n' opencl-driver", shell=True, text=True).splitlines()
 installed_opencl_nvidia_package = subprocess.run("expac -Qs '%n' opencl-nvidia", shell=True, capture_output=True, text=True).stdout.rstrip('\n')
 
-debugging_with_pickled_lspci = false  # turn to true if want to debug somebody's lspci dump.
+debugging_with_pickled_lspci = False  # turn to true if want to debug somebody's lspci dump.
 if not debugging_with_pickled_lspci:
     lspci_devices = VerboseParser().run()
 else:
