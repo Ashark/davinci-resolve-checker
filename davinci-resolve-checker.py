@@ -5,6 +5,7 @@ import distro
 import subprocess
 import local_strings
 from pylspci.parsers import VerboseParser
+import pickle
 
 parser = argparse.ArgumentParser(description="Davinci Resolve checker")
 parser.add_argument(
@@ -18,7 +19,7 @@ local_str = local_strings.LocalStrings(preferred_locale=args.locale)
 
 print(local_str["locale"], local_str.locale)
 
-print(local_str["project name"], "2.3.0")  # When bumping, do not forget to also bump it in readme.
+print(local_str["project name"], "2.4.0")  # When bumping, do not forget to also bump it in readme.
 
 if distro.id() not in {"arch", "manjaro", "endeavouros", "garuda"}:
     print(local_str["you are running"], distro.name(), "(", distro.id(), ")", local_str["script not tested on distro"])
@@ -78,7 +79,13 @@ with open("/sys/class/dmi/id/chassis_type", 'r') as file:
 installed_opencl_drivers = subprocess.check_output("expac -Qs '%n' opencl-driver", shell=True, text=True).splitlines()
 installed_opencl_nvidia_package = subprocess.run("expac -Qs '%n' opencl-nvidia", shell=True, capture_output=True, text=True).stdout.rstrip('\n')
 
-lspci_devices = VerboseParser().run()
+debugging_with_pickled_lspci = false  # turn to true if want to debug somebody's lspci dump.
+if not debugging_with_pickled_lspci:
+    lspci_devices = VerboseParser().run()
+else:
+    # Use some dump file. To generate dumps, use dump_lspci_list.py.
+    with open("lspci_dumps/optimus_laptop_no_any_driver_for_nvidia.bin", "rb") as fp:   # Unpickling.
+        lspci_devices = pickle.load(fp)
 
 print(local_str["chassis"], local_str[chassis_type])
 supported_chassis_types = ["Desktop", "Notebook"]
@@ -95,7 +102,7 @@ print(local_str["openCL drivers"], " ".join([str(x) for x in installed_opencl_dr
 # lspci -d ::0380 - amd secondary gpu on an i+a laptop
 
 print(local_str["presented gpus"])
-print("\t" + "\n\t".join([x.device.name + " (" + local_str["kernel driver"] + " " + x.driver + ")" for x in lspci_devices if x.cls.id in (0x0300, 0x0301, 0x0302, 0x0380)]))
+print("\t" + "\n\t".join([x.device.name + " (" + local_str["kernel driver"] + " " + str(x.driver or '-') + ")" for x in lspci_devices if x.cls.id in (0x0300, 0x0301, 0x0302, 0x0380)]))
 
 GL_VENDOR = subprocess.check_output('glxinfo | grep "OpenGL vendor string" | cut -f2 -d":"', shell=True, text=True).strip()
 print(local_str["opengl vendor"], GL_VENDOR)
