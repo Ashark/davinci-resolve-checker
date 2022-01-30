@@ -19,7 +19,7 @@ local_str = local_strings.LocalStrings(preferred_locale=args.locale)
 
 print(local_str["locale"], local_str.locale)
 
-print(local_str["project name"], "2.4.1")  # When bumping, do not forget to also bump it in readme.
+print(local_str["project name"], "2.5.0")  # When bumping, do not forget to also bump it in readme.
 
 if distro.id() not in {"arch", "manjaro", "endeavouros", "garuda"}:
     print(local_str["you are running"], distro.name(), "(", distro.id(), ")", local_str["script not tested on distro"])
@@ -87,10 +87,11 @@ else:
     with open("lspci_dumps/optimus_laptop_no_any_driver_for_nvidia.bin", "rb") as fp:   # Unpickling.
         lspci_devices = pickle.load(fp)
 
-print(local_str["chassis"], local_str[chassis_type])
-supported_chassis_types = ["Desktop", "Notebook"]
+print(local_str["chassis"], local_str.get(chassis_type, chassis_type))
+supported_chassis_types = ["Desktop", "Notebook", "Space-saving"]
 if chassis_type not in supported_chassis_types:
     print(local_str["unsupported chassis"])
+    exit(1)
 print(local_str["openCL drivers"], " ".join([str(x) for x in installed_opencl_drivers]))
 
 # Now we are going to check which GPUs are presented in system.
