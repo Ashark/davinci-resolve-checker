@@ -26,7 +26,7 @@ local_str = {
     "switch from radeon driver to amdgpu": "Вы сейчас используете драйвер radeon. Переключитесь на amdgpu, как описано тут: https://wiki.archlinux.org/title/AMDGPU#Enable_Southern_Islands_(SI)_and_Sea_Islands_(CIK)_support. Иначе вы не сможете запустить DaVinci Resolve.",
     "no support for amd driver, cannot run DR": "Ваша видеокарта поддерживает лишь драйвер radeon. Для DaVinci Resolve нужен проприетарный драйвер amdgpu progl, который работает поверх драйвера amdgpu. Вы не сможете запустить DaVinci Resolve.",
     "not running amdgpu driver, cannot run DR": "Почему-то вы не используете amdgpu драйвер. Вы не сможете запустить DaVinci Resolve.",
-    "not using Pro OpenGL": "Вы не используете Pro OpenGL реализацию. Установите amdgpu-pro-libgl и запустите DaVinci Resolve, используя превикс with progl. Иначе он аварийно завершится.",
+    "not using Pro OpenGL": "Вы не используете Pro OpenGL реализацию. Установите amdgpu-pro-libgl и запустите DaVinci Resolve, используя префикс progl. Иначе он аварийно завершится.",
     "missing opencl driver": "У вас не установлен opencl-driver для видеокарты AMD. Установите его, иначе вы не сможете использовать DaVinci Resolve.",
     "good to run DR": "Всё выглядит хорошо. У вас должно получиться нормально запустить DaVinci Resolve.",
     "missing opencl-nvidia package": "У вас нет пакета opencl-nvidia (либо альтернативного пакета, предоставляющего opencl-nvidia). Установите его, иначе вы не сможете использовать DR. Даже если вы планируете использовать cuda, opencl-nvidia всё равно установится как его зависимость.",
