@@ -32,4 +32,5 @@ local_str = {
     "missing opencl-nvidia package": "У вас нет пакета opencl-nvidia (либо альтернативного пакета, предоставляющего opencl-nvidia). Установите его, иначе вы не сможете использовать DR. Даже если вы планируете использовать cuda, opencl-nvidia всё равно установится как его зависимость.",
     "missing nvidia as kernel driver": "Вы не используете nvidia драйвер. Используйте проприетарный nvidia драйвер, иначе вы не сможете использовать DaVinci Resolve.",
     "not running nvidia rendered": "Вы не используете рендерер NVIDIA. Попробуйте запустить скрипт через prime-run или каким-то другим способом для optimus, иначе вы не сможете использовать DaVinci Resolve.",
+    "opencl-amd and progl versions mismatch": "Внимание: версии opencl-amd (%s) и amdgpu-pro-libgl (%s) не совпадают.",
 }

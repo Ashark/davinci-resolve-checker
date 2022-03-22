@@ -1,3 +1,4 @@
+# Language is Chinese Simplified
 local_str = {
     "locale": "使用语言环境:",
     "project name": "达芬奇调色检测工具",
@@ -32,4 +33,5 @@ local_str = {
     "missing opencl-nvidia package": "您没有opencl-nvidia包（或提供opencl-nvidia的替代包）。请务必安装它，否则您将无法使用达芬奇。即使您打算使用cuda，opencl-nvidia也是其必需的依赖项。",
     "missing nvidia as kernel driver": "您没有使用nvidia作为内核驱动程序。请使用专有的nvidia驱动程序，否则您将无法使用达芬奇。",
     "not running nvidia rendered": "您没有运行NVIDIA渲染器。尝试使用prime-run或其他optimus方法运行脚本，否则无法确保您可以正常使用使用达芬奇。",
+    "opencl-amd and progl versions mismatch": "警告：opencl-amd (%s) 和 amdgpu-pro-libgl (%s) 版本不匹配。",
 }

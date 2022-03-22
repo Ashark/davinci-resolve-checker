@@ -19,7 +19,7 @@ local_str = local_strings.LocalStrings(preferred_locale=args.locale)
 
 print(local_str["locale"], local_str.locale)
 
-print(local_str["project name"], "2.5.1")  # When bumping, do not forget to also bump it in readme.
+print(local_str["project name"], "2.6.0")  # When bumping, do not forget to also bump it in readme.
 
 if distro.id() not in {"arch", "manjaro", "endeavouros", "garuda"}:
     print(local_str["you are running"], distro.name(), "(", distro.id(), ")", local_str["script not tested on distro"])
@@ -188,12 +188,20 @@ if found_AMD_GPU:
         print(local_str["not using Pro OpenGL"])
         exit(1)
 
-    if 'opencl-amd' not in installed_opencl_drivers and 'opencl-amd-polaris' not in installed_opencl_drivers:
+    if 'opencl-amd' not in installed_opencl_drivers not in installed_opencl_drivers:
         print(local_str["missing opencl driver"])
         exit(1)
-    else:
-        print(local_str["good to run DR"])
-        # exit(0)
+
+    andgpu_pro_libgl_version = subprocess.run("expac -Q '%v' amdgpu-pro-libgl", shell=True, capture_output=True, text=True).stdout.rstrip('\n').partition("-")[0]
+    opencl_amd_version = subprocess.run("expac -Q '%v' opencl-amd", shell=True, capture_output=True, text=True).stdout.rstrip('\n').partition("-")[0]
+    index_of_last_dot = opencl_amd_version.rfind(".")
+    opencl_amd_version = opencl_amd_version[:index_of_last_dot] + "_" + opencl_amd_version[index_of_last_dot+1:]
+    opencl_amd_version = opencl_amd_version.replace(".50002","")
+
+    if opencl_amd_version != andgpu_pro_libgl_version:
+        print(local_str["opencl-amd and progl versions mismatch"]  % (opencl_amd_version, andgpu_pro_libgl_version))
+
+    print(local_str["good to run DR"])
 
 if found_NVIDIA_GPU:
     # I have tested it with DR 16.2.3 and found out that BMD have fixed that issue. See https://www.youtube.com/watch?v=NdOGFBHEnkU

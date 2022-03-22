@@ -32,4 +32,5 @@ local_str = {
     "missing opencl-nvidia package": "Você não tem o pacote opencl-nvidia (ou pacote alternativo que ofereça opencl-nvidia). Instale-o, caso contrário não poderá usar o DaVinci Resolve. Ainda que planeje usar cuda, opencl-nvidia é uma dependência necessária.",
     "missing nvidia as kernel driver": "Você não está usando nvidia como driver do kernel. Use um driver nvidia proprietário, caso contrário não poderá usar o DaVinci Resolve.",
     "not running nvidia rendered": "Você não está rodando o renderizador NVIDIA. Tente rodar o script com prime-run (vide README) ou outro método para optimus, caso contrário não poderá usar o DaVinci Resolve.",
+    "opencl-amd and progl versions mismatch": "Aviso: as versões opencl-amd (%s) e amdgpu-pro-libgl (%s) não correspondem.",
 }
