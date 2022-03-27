@@ -19,7 +19,7 @@ local_str = local_strings.LocalStrings(preferred_locale=args.locale)
 
 print(local_str["locale"], local_str.locale)
 
-print(local_str["project name"], "2.6.0")  # When bumping, do not forget to also bump it in readme.
+print(local_str["project name"], "2.6.1")  # When bumping, do not forget to also bump it in readme.
 
 if distro.id() not in {"arch", "manjaro", "endeavouros", "garuda"}:
     print(local_str["you are running"], distro.name(), "(", distro.id(), ")", local_str["script not tested on distro"])
@@ -76,7 +76,7 @@ chassis_types = {
 with open("/sys/class/dmi/id/chassis_type", 'r') as file:
     chassis_type = chassis_types[file.read().rstrip()]
 
-installed_opencl_drivers = subprocess.check_output("expac -Qs '%n' opencl-driver", shell=True, text=True).splitlines()
+installed_opencl_drivers = subprocess.run("expac -Qs '%n' opencl-driver", shell=True, capture_output=True, text=True).stdout.splitlines()
 installed_opencl_nvidia_package = subprocess.run("expac -Qs '%n' opencl-nvidia", shell=True, capture_output=True, text=True).stdout.rstrip('\n')
 
 debugging_with_pickled_lspci = False  # turn to true if want to debug somebody's lspci dump.
@@ -105,7 +105,7 @@ print(local_str["openCL drivers"], " ".join([str(x) for x in installed_opencl_dr
 print(local_str["presented gpus"])
 print("\t" + "\n\t".join([x.device.name + " (" + local_str["kernel driver"] + " " + str(x.driver or '-') + ")" for x in lspci_devices if x.cls.id in (0x0300, 0x0301, 0x0302, 0x0380)]))
 
-GL_VENDOR = subprocess.check_output('glxinfo | grep "OpenGL vendor string" | cut -f2 -d":"', shell=True, text=True).strip()
+GL_VENDOR = subprocess.run('glxinfo | grep "OpenGL vendor string" | cut -f2 -d":"', shell=True, capture_output=True, text=True).stdout.strip()
 print(local_str["opengl vendor"], GL_VENDOR)
 # By GL_VENDOR we can distinguish not only OpenGL Open/Pro implementations, but also a primary GPU in use (kinda).
 # See https://stackoverflow.com/questions/19985131/how-identify-the-primary-video-card-on-linux-programmatically for more information.
