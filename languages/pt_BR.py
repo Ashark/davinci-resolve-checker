@@ -7,6 +7,7 @@ local_str = {
     "chassis": "Tipo de Chassi:",
     "unsupported chassis": "Aviso: seu tipo de chassi não é compatível com o script. Por favor, relate o seu caso.",
     "Notebook": "computador portátil",
+    "Laptop": "untranslated",
     "Desktop": "computador de mesa",
     "openCL drivers": "Drivers OpenCL instalados:",
     "presented gpus": "GPUs apresentadas:",

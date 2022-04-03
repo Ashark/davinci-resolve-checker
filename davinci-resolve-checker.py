@@ -19,7 +19,7 @@ local_str = local_strings.LocalStrings(preferred_locale=args.locale)
 
 print(local_str["locale"], local_str.locale)
 
-print(local_str["project name"], "2.6.1")  # When bumping, do not forget to also bump it in readme.
+print(local_str["project name"], "2.6.2")  # When bumping, do not forget to also bump it in readme.
 
 if distro.id() not in {"arch", "manjaro", "endeavouros", "garuda"}:
     print(local_str["you are running"], distro.name(), "(", distro.id(), ")", local_str["script not tested on distro"])
@@ -88,7 +88,7 @@ else:
         lspci_devices = pickle.load(fp)
 
 print(local_str["chassis"], local_str.get(chassis_type, chassis_type))
-supported_chassis_types = ["Desktop", "Notebook", "Space-saving"]
+supported_chassis_types = ["Desktop", "Laptop", "Notebook", "Space-saving"]
 if chassis_type not in supported_chassis_types:
     print(local_str["unsupported chassis"])
     exit(1)
@@ -163,7 +163,7 @@ if not found_AMD_GPU and not found_NVIDIA_GPU and found_INTEL_GPU:
 
 if found_AMD_GPU:
     if found_INTEL_GPU:
-        if chassis_type == 'Notebook':
+        if chassis_type == 'Notebook' or chassis_type == 'Laptop':
             print(local_str["mixed intel and amd gpus"])
             exit(1)
         elif GL_VENDOR == "Intel":
