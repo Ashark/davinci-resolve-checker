@@ -19,8 +19,6 @@ local_str = {
     "several amd gpus": "You have several AMD GPUs. I am confused. Which one do you intend to use?",
     "several nvidia gpus": "You have several NVIDIA GPUs. I am confused. Which one do you intend to use?",
     "confused by nvidia and amd gpus": "You have AMD and NVIDIA GPUs. I am confused. Which one do you intend to use?",
-    "amd gpu binded to vfio-pci": "Your amd gpu is binded to vfio-pci, dropping it from further checking.",
-    "nvidia gpu binded to vfio-pci": "Your nvidia gpu is binded to vfio-pci, dropping it from further checking.",
     "only intel gpu, cannot run DR": "You have only Intel GPU. Currently DR cannot use intel GPUs for OpenCL. You cannot run DR. See https://forum.blackmagicdesign.com/viewtopic.php?f=21&t=81579",
     "mixed intel and amd gpus": "I did not find a working configuration yet for laptops with Intel + AMD graphics. Did you?",
     "set primary display to PCIE": "Your primary gpu is Intel. Go to your uefi settings and set primary display to PCIE. Otherwise you could not use DaVinci Resolve (I did not tested it).",
@@ -34,4 +32,5 @@ local_str = {
     "missing nvidia as kernel driver": "You are not using nvidia as kernel driver. Use proprietary nvidia driver, otherwise you could not use DaVinci Resolve.",
     "not running nvidia rendered": "You are not running NVIDIA renderer. Try to run the script with prime-run or other method for optimus, otherwise you could not use DaVinci Resolve.",
     "opencl-amd and progl versions mismatch": "Warning: opencl-amd (%s) and amdgpu-pro-libgl (%s) versions mismatch.",
+    "skipping vfio binded gpu": "The GPU %s has vfio-pci driver binded, skipping it from further checks.",
 }

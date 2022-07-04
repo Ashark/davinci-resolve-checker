@@ -20,8 +20,6 @@ local_str = {
     "several amd gpus": "检测到您有多个AMD显卡。您准备使用哪一个？",
     "several nvidia gpus": "检测到您有多个NVIDIA显卡。您准备使用哪一个？",
     "confused by nvidia and amd gpus": "检测到您有AMD和NVIDIA显卡。您准备使用哪一个？",
-    "amd gpu binded to vfio-pci": "您的AMD显卡已绑定到 vfio-pci，将不再进行进一步检查。",
-    "nvidia gpu binded to vfio-pci": "您的NVIDIA显卡已绑定到 vfio-pci，将不再进行进一步检查。",
     "only intel gpu, cannot run DR": "您只有英特尔显卡。目前达芬奇无法将英特尔显卡用于OpenCL。因此您不能运行达芬奇。详情请参考https://forum.blackmagicdesign.com/viewtopic.php?f=21&t=81579",
     "mixed intel and amd gpus": "暂未找到适用于英特尔+AMD显卡的笔记本电脑的工作配置。您是不是使用的这个型号的笔记本？",
     "set primary display to PCIE": "检测到您的主显卡是英特尔。您可以在UEFI设置中将主显示器设置为PCIE。否则您将无法使用DaVinci Resolve（尚未测试）。",
@@ -35,4 +33,5 @@ local_str = {
     "missing nvidia as kernel driver": "您没有使用nvidia作为内核驱动程序。请使用专有的nvidia驱动程序，否则您将无法使用达芬奇。",
     "not running nvidia rendered": "您没有运行NVIDIA渲染器。尝试使用prime-run或其他optimus方法运行脚本，否则无法确保您可以正常使用使用达芬奇。",
     "opencl-amd and progl versions mismatch": "警告：opencl-amd (%s) 和 amdgpu-pro-libgl (%s) 版本不匹配。",
+    "skipping vfio binded gpu": "GPU %s 绑定了 vfio-pci 驱动程序，将其从进一步检查中跳过。",
 }

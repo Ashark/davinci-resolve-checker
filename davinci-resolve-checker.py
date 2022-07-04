@@ -19,7 +19,7 @@ local_str = local_strings.LocalStrings(preferred_locale=args.locale)
 
 print(local_str["locale"], local_str.locale)
 
-print(local_str["project name"], "2.6.2")  # When bumping, do not forget to also bump it in readme.
+print(local_str["project name"], "2.7.0")  # When bumping, do not forget to also bump it in readme.
 
 if distro.id() not in {"arch", "manjaro", "endeavouros", "garuda"}:
     print(local_str["you are running"], distro.name(), "(", distro.id(), ")", local_str["script not tested on distro"])
@@ -126,6 +126,9 @@ found_NVIDIA_GPU = None
 
 for device in lspci_devices:
     if device.cls.id in (0x0300, 0x0301, 0x0302, 0x0380):
+        if device.driver == "vfio-pci":
+            print(local_str["skipping vfio binded gpu"] % device.device.name)
+            continue
         if device.vendor.name == 'Intel Corporation':
             if found_INTEL_GPU == None:
                 found_INTEL_GPU = device
@@ -146,16 +149,8 @@ for device in lspci_devices:
                 exit(1)
 
 if found_AMD_GPU and found_NVIDIA_GPU:
-    if found_AMD_GPU.driver != "vfio-pci" and found_NVIDIA_GPU.driver != "vfio-pci":
-        print(local_str["confused by nvidia and amd gpus"])
-        exit(1)
-    else:
-        if found_AMD_GPU.driver == "vfio-pci":
-            print(local_str["amd gpu binded to vfio-pci"])
-            found_AMD_GPU = None
-        if found_NVIDIA_GPU.driver == "vfio-pci":
-            print(local_str["nvidia gpu binded to vfio-pci"])
-            found_NVIDIA_GPU = None
+    print(local_str["confused by nvidia and amd gpus"])
+    exit(1)
 
 if not found_AMD_GPU and not found_NVIDIA_GPU and found_INTEL_GPU:
     print(local_str["only intel gpu, cannot run DR"])

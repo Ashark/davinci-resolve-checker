@@ -19,8 +19,6 @@ local_str = {
     "several amd gpus": "У вас несколько видеокарт AMD. Это странно. Какую вы собираетесь использовать?",
     "several nvidia gpus": "У вас несколько видеокарт NVIDIA. Это странно. Какую вы собираетесь использовать?",
     "confused by nvidia and amd gpus": "У вас есть видеокарта как от AMD, так и от NVIDIA. Это странно. Какую вы собираетесь использовать?",
-    "amd gpu binded to vfio-pci": "Ваша видеокарта от amd привязана к драйверу vfio-pci, убираем её из дальнейших проверок.",
-    "nvidia gpu binded to vfio-pci": "Ваша видеокарта от nvidia привязана к драйверу vfio-pci, убираем её из дальнейших проверок.",
     "only intel gpu, cannot run DR": "У вас есть только видеокарта от Intel. На данный момент DR не умеет использовать intel видеокарты для OpenCL. Вы не сможете запустить DR. См. https://forum.blackmagicdesign.com/viewtopic.php?f=21&t=81579",
     "mixed intel and amd gpus": "Мне не удалось найти работающую конфигурацию на ноутбуках для Intel + AMD графики. А вам?",
     "set primary display to PCIE": "Ваша основная видеокарта - Intel. Перейдите в настройки uefi и назначьте первичную видеокарту на PCIE. Иначе вы не сможете использовать DaVinci Resolve (я это не тестировал).",
@@ -34,4 +32,5 @@ local_str = {
     "missing nvidia as kernel driver": "Вы не используете nvidia драйвер. Используйте проприетарный nvidia драйвер, иначе вы не сможете использовать DaVinci Resolve.",
     "not running nvidia rendered": "Вы не используете рендерер NVIDIA. Попробуйте запустить скрипт через prime-run или каким-то другим способом для optimus, иначе вы не сможете использовать DaVinci Resolve.",
     "opencl-amd and progl versions mismatch": "Внимание: версии opencl-amd (%s) и amdgpu-pro-libgl (%s) не совпадают.",
+    "skipping vfio binded gpu": "GPU %s использует драйвер vfio-pci, убираем его из дальнейших проверок.",
 }
