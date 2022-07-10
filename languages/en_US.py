@@ -33,4 +33,5 @@ local_str = {
     "not running nvidia rendered": "You are not running NVIDIA renderer. Try to run the script with prime-run or other method for optimus, otherwise you could not use DaVinci Resolve.",
     "opencl-amd and progl versions mismatch": "Warning: opencl-amd (%s) and amdgpu-pro-libgl (%s) versions mismatch.",
     "skipping vfio binded gpu": "The GPU %s has vfio-pci driver binded, skipping it from further checks.",
+    "amd codename undetectable": "Warning: not found your gpu in list of codenames. Assuming it is old gpu requiring progl. If that is untrue, please report.",
 }

@@ -78,6 +78,9 @@ chassis_types = {
     "36": "Stick PC"
 }
 
+amd_codenames_progl_needed = ["Ellesmere"]
+amd_codenames_progl_not_needed = ["Vaga", "Navi"]
+
 with open("/sys/class/dmi/id/chassis_type", 'r') as file:
     chassis_type = chassis_types[file.read().rstrip()]
 
@@ -180,7 +183,16 @@ if found_AMD_GPU:
         print(local_str["not running amdgpu driver, cannot run DR"])
         exit(1)
 
-    if GL_VENDOR != "Advanced Micro Devices, Inc.":
+    need_progl = "Unknown"
+    if any(codename in found_AMD_GPU.device.name for codename in amd_codenames_progl_needed):
+        need_progl = "True"
+    if any(codename in found_AMD_GPU.device.name for codename in amd_codenames_progl_not_needed):
+        need_progl = "False"
+    if need_progl == "Unknown":
+        print(local_str["amd codename undetectable"])
+        need_progl = "True"
+
+    if GL_VENDOR != "Advanced Micro Devices, Inc." and need_progl:
         # Note: If you run "progl glmark2", you see there "GL_VENDOR:     ATI Technologies Inc.",
         # but if you run "progl glxinfo", you always get "OpenGL vendor string: Advanced Micro Devices, Inc."
         # independently of you use X or Wayland; I+A, A+I or just AMD gpu in system.
@@ -188,7 +200,7 @@ if found_AMD_GPU:
         print(local_str["not using Pro OpenGL"])
         exit(1)
 
-    if 'opencl-amd' not in installed_opencl_drivers not in installed_opencl_drivers:
+    if 'opencl-amd' not in installed_opencl_drivers:
         print(local_str["missing opencl driver"])
         exit(1)
 
