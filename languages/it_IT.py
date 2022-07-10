@@ -33,4 +33,5 @@ local_str = {
     "not running nvidia rendered": "Non stai eseguendo il renderizzatore NVIDIA. Prova ad eseguire lo script con prime-run o un altro metodo per Optimus, altrimenti non potrai utilizzare DaVinci Resolve.",
     "opencl-amd and progl versions mismatch": "Warning: opencl-amd (%s) and amdgpu-pro-libgl (%s) versions mismatch.",
     "skipping vfio binded gpu": "La GPU %s ha il driver vfio-pci vincolato, saltandolo da ulteriori controlli.",
+    "amd codename undetectable": "Attentione: non trovato la tua GPU nell'elenco dei programmi di codice.Supponendo che sia una vecchia GPU che richiede Progl.Se questo non è vero, si prega di segnalare.",
 }

@@ -20,7 +20,7 @@ local_str = local_strings.LocalStrings(preferred_locale=args.locale)
 
 print(local_str["locale"], local_str.locale)
 
-print(local_str["project name"], "2.7.2")  # When bumping, do not forget to also bump it in readme.
+print(local_str["project name"], "2.8.0")  # When bumping, do not forget to also bump it in readme.
 
 if distro.id() not in {"arch", "manjaro", "endeavouros", "garuda"}:
     print(local_str["you are running"], distro.name(), "(", distro.id(), ")", local_str["script not tested on distro"])
@@ -77,6 +77,9 @@ chassis_types = {
     "35": "Mini PC",
     "36": "Stick PC"
 }
+
+amd_codenames_progl_needed = ["Ellesmere"]
+amd_codenames_progl_not_needed = ["Vaga", "Navi"]
 
 with open("/sys/class/dmi/id/chassis_type", 'r') as file:
     chassis_type = chassis_types[file.read().rstrip()]
@@ -135,19 +138,19 @@ for device in lspci_devices:
             print(local_str["skipping vfio binded gpu"] % device.device.name)
             continue
         if device.vendor.name == 'Intel Corporation':
-            if found_INTEL_GPU == None:
+            if found_INTEL_GPU is None:
                 found_INTEL_GPU = device
             else:
                 print(local_str["several intel gpus"])
                 exit(1)
         if device.vendor.name == 'Advanced Micro Devices, Inc. [AMD/ATI]':
-            if found_AMD_GPU == None:
+            if found_AMD_GPU is None:
                 found_AMD_GPU = device
             else:
                 print(local_str["several amd gpus"])
                 exit(1)
         if device.vendor.name == 'NVIDIA Corporation':
-            if found_NVIDIA_GPU == None:
+            if found_NVIDIA_GPU is None:
                 found_NVIDIA_GPU = device
             else:
                 print(local_str["several nvidia gpus"])
@@ -180,7 +183,16 @@ if found_AMD_GPU:
         print(local_str["not running amdgpu driver, cannot run DR"])
         exit(1)
 
-    if GL_VENDOR != "Advanced Micro Devices, Inc.":
+    need_progl = "Unknown"
+    if any(codename in found_AMD_GPU.device.name for codename in amd_codenames_progl_needed):
+        need_progl = "True"
+    if any(codename in found_AMD_GPU.device.name for codename in amd_codenames_progl_not_needed):
+        need_progl = "False"
+    if need_progl == "Unknown":
+        print(local_str["amd codename undetectable"])
+        need_progl = "True"
+
+    if GL_VENDOR != "Advanced Micro Devices, Inc." and need_progl:
         # Note: If you run "progl glmark2", you see there "GL_VENDOR:     ATI Technologies Inc.",
         # but if you run "progl glxinfo", you always get "OpenGL vendor string: Advanced Micro Devices, Inc."
         # independently of you use X or Wayland; I+A, A+I or just AMD gpu in system.
@@ -188,18 +200,23 @@ if found_AMD_GPU:
         print(local_str["not using Pro OpenGL"])
         exit(1)
 
-    if 'opencl-amd' not in installed_opencl_drivers not in installed_opencl_drivers:
-        print(local_str["missing opencl driver"])
-        exit(1)
+    if need_progl:
+        if not any(appropriate_driver in installed_opencl_drivers for appropriate_driver in ["opencl-amd", "opencl-legacy-amdgpu-pro"]):
+            print(local_str["missing opencl driver"])
+            exit(1)
+    else:
+        if not any(appropriate_driver in installed_opencl_drivers for appropriate_driver in ["opencl-amd", "rocm-opencl-runtime"]):
+            print(local_str["missing opencl driver"])
+            exit(1)
 
     andgpu_pro_libgl_version = subprocess.run("expac -Q '%v' amdgpu-pro-libgl", shell=True, capture_output=True, text=True).stdout.rstrip('\n').partition("-")[0]
     opencl_amd_version = subprocess.run("expac -Q '%v' opencl-amd", shell=True, capture_output=True, text=True).stdout.rstrip('\n').partition("-")[0]
     index_of_last_dot = opencl_amd_version.rfind(".")
     opencl_amd_version = opencl_amd_version[:index_of_last_dot] + "_" + opencl_amd_version[index_of_last_dot+1:]
-    opencl_amd_version = opencl_amd_version.replace(".50002","")
+    opencl_amd_version = opencl_amd_version.replace(".50002", "")
 
     if opencl_amd_version != andgpu_pro_libgl_version:
-        print(local_str["opencl-amd and progl versions mismatch"]  % (opencl_amd_version, andgpu_pro_libgl_version))
+        print(local_str["opencl-amd and progl versions mismatch"] % (opencl_amd_version, andgpu_pro_libgl_version))
 
     print(local_str["good to run DR"])
 

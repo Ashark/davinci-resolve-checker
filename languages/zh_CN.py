@@ -34,4 +34,5 @@ local_str = {
     "not running nvidia rendered": "您没有运行NVIDIA渲染器。尝试使用prime-run或其他optimus方法运行脚本，否则无法确保您可以正常使用使用达芬奇。",
     "opencl-amd and progl versions mismatch": "警告：opencl-amd (%s) 和 amdgpu-pro-libgl (%s) 版本不匹配。",
     "skipping vfio binded gpu": "GPU %s 绑定了 vfio-pci 驱动程序，将其从进一步检查中跳过。",
+    "amd codename undetectable": "警告：未在代号列表中找到您的GPU。假设它是旧的GPU需要progl。如果那是不真实的，请报告。",
 }

@@ -2,7 +2,7 @@
 [![platform](https://img.shields.io/badge/platform-linux-lightgrey.svg)](https://en.wikipedia.org/wiki/Linux)
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
 ![license](https://img.shields.io/github/license/Ashark/davinci-resolve-checker.svg)
-![checker version](https://img.shields.io/badge/checker_version-2.7.2-green.svg)
+![checker version](https://img.shields.io/badge/checker_version-2.8.0-green.svg)
 
 [![davinci-resolve aur version](https://img.shields.io/aur/version/davinci-resolve?label=davinci-resolve)](https://aur.archlinux.org/packages/davinci-resolve)
 [![davinci-resolve-studio aur version](https://img.shields.io/aur/version/davinci-resolve-studio?label=davinci-resolve-studio)](https://aur.archlinux.org/packages/davinci-resolve-studio)
@@ -77,6 +77,7 @@ If you have find some error or want to ask for a feature, open a new issue and d
 Currently, this script displays messages in these locales:
 
 * `en_US` - English, United States
+* `it_IT` - Italian
 * `pt_BR` - Portiguese, Brazil
 * `ru_RU` - Russian, Russian Federation
 * `zh_CN` - Chinese, Simplified
@@ -88,3 +89,5 @@ The name of your file should match exactly the locale identification. For exampl
 After implementing the translation, run `python -m unittest` to certify everything is in order.
 
 If you see any errors, it means your translation dictionary `local_str` has misconfigured keys. Double check against the `en_US.py` file, or open an issue if you need assistance.
+
+To translate in vs code, use [Vscode Google Translate](https://marketplace.visualstudio.com/items?itemName=funkyremi.vscode-google-translate) extension. Also redefine shortcuts, see [#74](https://github.com/funkyremi/vscode-google-translate/issues/74)
