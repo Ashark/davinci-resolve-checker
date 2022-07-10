@@ -200,9 +200,14 @@ if found_AMD_GPU:
         print(local_str["not using Pro OpenGL"])
         exit(1)
 
-    if 'opencl-amd' not in installed_opencl_drivers:
-        print(local_str["missing opencl driver"])
-        exit(1)
+    if need_progl:
+        if not any(appropriate_driver in installed_opencl_drivers for appropriate_driver in ["opencl-amd", "opencl-legacy-amdgpu-pro"]):
+            print(local_str["missing opencl driver"])
+            exit(1)
+    else:
+        if not any(appropriate_driver in installed_opencl_drivers for appropriate_driver in ["opencl-amd", "rocm-opencl-runtime"]):
+            print(local_str["missing opencl driver"])
+            exit(1)
 
     andgpu_pro_libgl_version = subprocess.run("expac -Q '%v' amdgpu-pro-libgl", shell=True, capture_output=True, text=True).stdout.rstrip('\n').partition("-")[0]
     opencl_amd_version = subprocess.run("expac -Q '%v' opencl-amd", shell=True, capture_output=True, text=True).stdout.rstrip('\n').partition("-")[0]
