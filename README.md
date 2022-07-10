@@ -77,6 +77,7 @@ If you have find some error or want to ask for a feature, open a new issue and d
 Currently, this script displays messages in these locales:
 
 * `en_US` - English, United States
+* `it_IT` - Italian
 * `pt_BR` - Portiguese, Brazil
 * `ru_RU` - Russian, Russian Federation
 * `zh_CN` - Chinese, Simplified
@@ -88,3 +89,5 @@ The name of your file should match exactly the locale identification. For exampl
 After implementing the translation, run `python -m unittest` to certify everything is in order.
 
 If you see any errors, it means your translation dictionary `local_str` has misconfigured keys. Double check against the `en_US.py` file, or open an issue if you need assistance.
+
+To translate in vs code, use [Vscode Google Translate](https://marketplace.visualstudio.com/items?itemName=funkyremi.vscode-google-translate) extension. Also redefine shortcuts, see [#74](https://github.com/funkyremi/vscode-google-translate/issues/74)
