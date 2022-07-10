@@ -138,19 +138,19 @@ for device in lspci_devices:
             print(local_str["skipping vfio binded gpu"] % device.device.name)
             continue
         if device.vendor.name == 'Intel Corporation':
-            if found_INTEL_GPU == None:
+            if found_INTEL_GPU is None:
                 found_INTEL_GPU = device
             else:
                 print(local_str["several intel gpus"])
                 exit(1)
         if device.vendor.name == 'Advanced Micro Devices, Inc. [AMD/ATI]':
-            if found_AMD_GPU == None:
+            if found_AMD_GPU is None:
                 found_AMD_GPU = device
             else:
                 print(local_str["several amd gpus"])
                 exit(1)
         if device.vendor.name == 'NVIDIA Corporation':
-            if found_NVIDIA_GPU == None:
+            if found_NVIDIA_GPU is None:
                 found_NVIDIA_GPU = device
             else:
                 print(local_str["several nvidia gpus"])
@@ -208,10 +208,10 @@ if found_AMD_GPU:
     opencl_amd_version = subprocess.run("expac -Q '%v' opencl-amd", shell=True, capture_output=True, text=True).stdout.rstrip('\n').partition("-")[0]
     index_of_last_dot = opencl_amd_version.rfind(".")
     opencl_amd_version = opencl_amd_version[:index_of_last_dot] + "_" + opencl_amd_version[index_of_last_dot+1:]
-    opencl_amd_version = opencl_amd_version.replace(".50002","")
+    opencl_amd_version = opencl_amd_version.replace(".50002", "")
 
     if opencl_amd_version != andgpu_pro_libgl_version:
-        print(local_str["opencl-amd and progl versions mismatch"]  % (opencl_amd_version, andgpu_pro_libgl_version))
+        print(local_str["opencl-amd and progl versions mismatch"] % (opencl_amd_version, andgpu_pro_libgl_version))
 
     print(local_str["good to run DR"])
 
