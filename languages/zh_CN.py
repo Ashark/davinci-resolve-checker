@@ -8,7 +8,7 @@ local_str = {
     "chassis": "设备类型:",
     "unsupported chassis": "警告：脚本不支持您的机箱类型。 请报告您的情况。",
     "Notebook": "笔记本电脑",
-    "Laptop": "untranslated",
+    "Laptop": "笔记本电脑",
     "Desktop": "桌面",
     "openCL drivers": "已安装的OpenCL驱动:",
     "presented gpus": "显卡型号:",
