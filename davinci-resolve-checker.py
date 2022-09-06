@@ -79,7 +79,7 @@ chassis_types = {
 }
 
 amd_codenames_progl_needed = ["Ellesmere"]
-amd_codenames_progl_not_needed = ["Vaga", "Navi"]
+amd_codenames_progl_not_needed = ["Vega", "Navi"]
 
 with open("/sys/class/dmi/id/chassis_type", 'r') as file:
     chassis_type = chassis_types[file.read().rstrip()]
