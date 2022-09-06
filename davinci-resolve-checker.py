@@ -200,7 +200,7 @@ if found_AMD_GPU:
         print(local_str["not using Pro OpenGL"])
         exit(1)
 
-    if need_progl:
+    if need_progl == "True":
         if not any(appropriate_driver in installed_opencl_drivers for appropriate_driver in ["opencl-amd", "opencl-legacy-amdgpu-pro"]):
             print(local_str["missing opencl driver"])
             exit(1)
