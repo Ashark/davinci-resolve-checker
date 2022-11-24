@@ -20,7 +20,7 @@ local_str = local_strings.LocalStrings(preferred_locale=args.locale)
 
 print(local_str["locale"], local_str.locale)
 
-print(local_str["project name"], "2.8.1")  # When bumping, do not forget to also bump it in readme.
+print(local_str["project name"], "3.0.0")  # When bumping, do not forget to also bump it in readme.
 
 if distro.id() not in {"arch", "manjaro", "endeavouros", "garuda"}:
     print(local_str["you are running"], distro.name(), "(", distro.id(), ")", local_str["script not tested on distro"])
@@ -118,6 +118,9 @@ print(local_str["opengl vendor"], GL_VENDOR)
 # By GL_VENDOR we can distinguish not only OpenGL Open/Pro implementations, but also a primary GPU in use (kinda).
 # See https://stackoverflow.com/questions/19985131/how-identify-the-primary-video-card-on-linux-programmatically for more information.
 
+GL_RENDERER = subprocess.run("glxinfo | grep -i 'OpenGL renderer' | cut -f2 -d ':' | xargs", shell=True, capture_output=True, text=True).stdout.strip()
+print("OpenGL renderer string: " + GL_RENDERER)  # Useful when there are several gpus, especially from one vendor
+
 print("")  # Empty line, to separate verdict from configuration info.
 
 if GL_VENDOR == "":
@@ -148,7 +151,13 @@ for device in lspci_devices:
                 found_AMD_GPU = device
             else:
                 print(local_str["several amd gpus"])
-                exit(1)
+
+                pci_slot = "DRI_PRIME=pci-" + str(device.slot).replace(":", "_").replace(".", "_")  # Example: "DRI_PRIME=pci-0000_02_00_0", see https://docs.mesa3d.org/envvars.html#core-mesa-environment-variables
+                gl_renderer_for_gpu = subprocess.run(pci_slot + " glxinfo | grep 'OpenGL renderer' | cut -f2 -d ':' | xargs", shell=True, capture_output=True, text=True).stdout.strip()
+                if GL_RENDERER != gl_renderer_for_gpu:
+                    continue  # previous found amd GPU is renderer, and current is not. We keep previous.
+                else:
+                    found_AMD_GPU = device  # previous found amd GPU is not renderer, so we take this
         if device.vendor.name == 'NVIDIA Corporation':
             if found_NVIDIA_GPU is None:
                 found_NVIDIA_GPU = device
