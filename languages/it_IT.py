@@ -16,7 +16,7 @@ local_str = {
     "missing opengl vendor": "Impossibile trovare la riga del fornitore OpenGL. Probabilmente stai tentando di utilizzare AMD Pro OpenGL mentre la tua GPU primaria è Intel. Inoltre probabilmente stai lanciando lo script da ssh.",
     "should uninstall opencl-mesa": "Dovresti disinstallare opencl-mesa. Altrimenti DR (v17.1.1) andrà in errore: l'immagine è corrotta. Ma se togli la spunta dalla casella gpu nelle impostazioni e riapri DR, allora tutta la sessione desktop si corromperà e potrai solo riavviare il tuo PC. Questo è stato osservato almeno su GPU AMD.",
     "several intel gpus": "Hai alcune GPUs INTEL. Sono confuso. Stai usando una scheda madre multi CPU? Oppure con igpu intel + dgpu intel (che al momento della stesura di questo testo non esiste)?",
-    "several amd gpus": "Hai alcune GPUs AMD. Sono confuso. Quale intendi utilizzare?",
+    "several amd gpus": "Hai diverse GPU AMD. DR Studio può utilizzare diverse GPU. Lo script verificherà se viene utilizzato il driver appropriato per la GPU del renderer. Ma tieni presente che se usi prime offload, la tua gpu primaria ha ancora bisogno di un driver appropriato (lo script non lo controlla).",
     "several nvidia gpus": "Hai alcune GPUs NVIDIA. Sono confuso. Quale intendi utilizzare?",
     "confused by nvidia and amd gpus": "Hai si GPU Nvidia che AMD. Sono confuso. Quale intendi utilizzare?",
     "only intel gpu, cannot run DR": "Hai solo la GPU Intel. In questo momento DR non può utilizzare GPUs intel per OpenCL. Non puoi eseguire DR. Vedi https://forum.blackmagicdesign.com/viewtopic.php?f=21&t=81579",

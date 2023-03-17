@@ -17,7 +17,7 @@ local_str = {
     "missing opengl vendor": "无法查询OpenGL供应商信息。您的显卡型号可能是Intel，然而您在尝试使用AMD Pro OpenGL或您在SSH环境下运行本程序。",
     "should uninstall opencl-mesa": "您需要卸载opencl-mesa，否则达芬奇(v17.1.1)将无法运行: 镜像已损坏。但是如果您在设置中反选gpu复选框然后重新启动达芬奇，那么可能会导致整个桌面会话都会损坏，您只能重新启动您的电脑。 至少在AMD显卡上可以观察到这一点。",
     "several intel gpus": "检测到您有多个INTEL显卡。您是否在使用多CPU台式机主板？还是intel igpu + intel dgpu（在编写本程序的时候尚未发现这一现象）？",
-    "several amd gpus": "检测到您有多个AMD显卡。您准备使用哪一个？",
+    "several amd gpus": "您有多个 AMD GPU。 DR Studio 可以使用多个 GPU。 脚本将检查是否使用了适用于您的渲染器 GPU 的驱动程序。 但请记住，如果您使用主要卸载，那么您的主要 gpu 仍然需要适当的驱动程序（脚本不会检查它）。",
     "several nvidia gpus": "检测到您有多个NVIDIA显卡。您准备使用哪一个？",
     "confused by nvidia and amd gpus": "检测到您有AMD和NVIDIA显卡。您准备使用哪一个？",
     "only intel gpu, cannot run DR": "您只有英特尔显卡。目前达芬奇无法将英特尔显卡用于OpenCL。因此您不能运行达芬奇。详情请参考https://forum.blackmagicdesign.com/viewtopic.php?f=21&t=81579",
