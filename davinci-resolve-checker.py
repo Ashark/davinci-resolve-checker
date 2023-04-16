@@ -7,6 +7,7 @@ import local_strings
 from pylspci.parsers import VerboseParser
 import pickle
 import sys
+import os
 
 parser = argparse.ArgumentParser(description="Davinci Resolve checker")
 parser.add_argument(
@@ -14,13 +15,19 @@ parser.add_argument(
     help="Locale for messages print by the checker, e.g. 'en_US'",
     dest='locale'
 )
+parser.add_argument(
+    "-p", "--pro",
+    help="Make checks for AMD proprietary stack (legacy OpenCL and proprietary OpenGL)",
+    action='store_true',
+    dest='pro_stack'
+)
 args = parser.parse_args()
 
 local_str = local_strings.LocalStrings(preferred_locale=args.locale)
 
 print(local_str["locale"], local_str.locale)
 
-print(local_str["project name"], "3.0.4")  # When bumping, do not forget to also bump it in readme.
+print(local_str["project name"], "4.0.0")  # When bumping, do not forget to also bump it in readme.
 
 if distro.id() not in {"arch", "manjaro", "endeavouros", "garuda"}:
     print(local_str["you are running"], distro.name(), "(", distro.id(), ")", local_str["script not tested on distro"])
@@ -78,8 +85,8 @@ chassis_types = {
     "36": "Stick PC"
 }
 
-amd_codenames_progl_needed = ["Ellesmere"]
-amd_codenames_progl_not_needed = ["Vega", "Navi", "Cezanne"]
+amd_codenames_pre_vega = ["Ellesmere"]
+amd_codenames_vega_and_onward = ["Vega", "Navi", "Cezanne"]
 
 with open("/sys/class/dmi/id/chassis_type", 'r') as file:
     chassis_type = chassis_types[file.read().rstrip()]
@@ -192,39 +199,52 @@ if found_AMD_GPU:
         print(local_str["not running amdgpu driver, cannot run DR"])
         exit(1)
 
-    need_progl = "Unknown"
-    if any(codename in found_AMD_GPU.device.name for codename in amd_codenames_progl_needed):
-        need_progl = "True"
-    if any(codename in found_AMD_GPU.device.name for codename in amd_codenames_progl_not_needed):
-        need_progl = "False"
-    if need_progl == "Unknown":
+    is_pre_vega = "Unknown"
+    if any(codename in found_AMD_GPU.device.name for codename in amd_codenames_pre_vega):
+        is_pre_vega = "True"
+    if any(codename in found_AMD_GPU.device.name for codename in amd_codenames_vega_and_onward):
+        is_pre_vega = "False"
+    if is_pre_vega == "Unknown":
         print(local_str["amd codename undetectable"])
-        need_progl = "True"
+        is_pre_vega = "True"
 
-    if GL_VENDOR != "Advanced Micro Devices, Inc." and need_progl == "True":
-        # Note: If you run "progl glmark2", you see there "GL_VENDOR:     ATI Technologies Inc.",
-        # but if you run "progl glxinfo", you always get "OpenGL vendor string: Advanced Micro Devices, Inc."
-        # independently of you use X or Wayland; I+A, A+I or just AMD gpu in system.
-        # So we check if it is "Advanced Micro Devices, Inc.".
-        print(local_str["not using Pro OpenGL"])
-        exit(1)
-
-    if need_progl == "True":
-        if not any(appropriate_driver in installed_opencl_drivers for appropriate_driver in ["opencl-amd", "opencl-legacy-amdgpu-pro"]):
-            print(local_str["missing opencl driver"])
+    if args.pro_stack == True:
+        if GL_VENDOR != "Advanced Micro Devices, Inc." and is_pre_vega == "True":
+            # Note: If you run "progl glmark2", you see there "GL_VENDOR:     ATI Technologies Inc.",
+            # but if you run "progl glxinfo", you always get "OpenGL vendor string: Advanced Micro Devices, Inc."
+            # independently of you use X or Wayland; I+A, A+I or just AMD gpu in system.
+            # So we check if it is "Advanced Micro Devices, Inc.".
+            print(local_str["not using Pro OpenGL"])
             exit(1)
-    else:
-        if not any(appropriate_driver in installed_opencl_drivers for appropriate_driver in ["opencl-amd", "rocm-opencl-runtime"]):
-            print(local_str["missing opencl driver"])
+        else:
+            print("Warning: Running pro stack on modern gpu?")  # TODO translations
+
+        if is_pre_vega == "True":
+            if not any(appropriate_driver in installed_opencl_drivers for appropriate_driver in ["opencl-amd", "opencl-legacy-amdgpu-pro"]):
+                print(local_str["missing opencl driver"])
+                exit(1)
+        else:
+            if not any(appropriate_driver in installed_opencl_drivers for appropriate_driver in ["opencl-amd", "rocm-opencl-runtime"]):
+                print(local_str["missing opencl driver"])
+                exit(1)
+
+        andgpu_pro_libgl_version = subprocess.run("expac -Q '%v' amdgpu-pro-libgl", shell=True, capture_output=True, text=True).stdout.rstrip('\n').partition("_")[0]
+        opencl_amd_version = subprocess.run("expac -Q '%v' opencl-amd", shell=True, capture_output=True, text=True).stdout.rstrip('\n').partition("-")[0]
+        index_of_last_dot = opencl_amd_version.rfind(".")
+        opencl_amd_version = opencl_amd_version[:index_of_last_dot]
+
+        if opencl_amd_version != andgpu_pro_libgl_version:
+            print(local_str["opencl-amd and progl versions mismatch"] % (opencl_amd_version, andgpu_pro_libgl_version))
+    else:  # do not want pro stack
+        if is_pre_vega:
+            if os.environ.get('ROC_ENABLE_PRE_VEGA', "0") != "1":
+                print("You should use ROC_ENABLE_PRE_VEGA=1 environment variable. Otherwise use pro stack.")  # TODO translations
+                exit(1)
+
+        if not any(appropriate_driver in installed_opencl_drivers for appropriate_driver in ["rocm-opencl-runtime"]):
+            print("missing rocm-opencl-runtime opencl driver")  # TODO translations
             exit(1)
-
-    andgpu_pro_libgl_version = subprocess.run("expac -Q '%v' amdgpu-pro-libgl", shell=True, capture_output=True, text=True).stdout.rstrip('\n').partition("_")[0]
-    opencl_amd_version = subprocess.run("expac -Q '%v' opencl-amd", shell=True, capture_output=True, text=True).stdout.rstrip('\n').partition("-")[0]
-    index_of_last_dot = opencl_amd_version.rfind(".")
-    opencl_amd_version = opencl_amd_version[:index_of_last_dot]
-
-    if opencl_amd_version != andgpu_pro_libgl_version:
-        print(local_str["opencl-amd and progl versions mismatch"] % (opencl_amd_version, andgpu_pro_libgl_version))
+        # TODO Check also that legacy stack is not interfering (uninstalled opencl-amd). Or if that should be offline.
 
     print(local_str["good to run DR"])
 
