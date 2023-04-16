@@ -96,8 +96,8 @@ else:
         lspci_devices = pickle.load(fp)
 
 print(local_str["chassis"], local_str.get(chassis_type, chassis_type))
-supported_chassis_types = ["Desktop", "Laptop", "Notebook", "Space-saving", "Convertible"]
-if chassis_type not in supported_chassis_types:
+supported_mobile_chassis_types = ["Laptop", "Notebook", "Space-saving", "Convertible"]
+if chassis_type != "Desktop" and chassis_type not in supported_mobile_chassis_types:
     print(local_str["unsupported chassis"])
     exit(1)
 print(local_str["openCL drivers"], " ".join([str(x) for x in installed_opencl_drivers]))
@@ -175,7 +175,7 @@ if not found_AMD_GPU and not found_NVIDIA_GPU and found_INTEL_GPU:
 
 if found_AMD_GPU:
     if found_INTEL_GPU:
-        if chassis_type in ("Notebook", "Laptop", "Convertible"):
+        if chassis_type in supported_mobile_chassis_types:
             print(local_str["mixed intel and amd gpus"])
             exit(1)
         elif GL_VENDOR == "Intel":
