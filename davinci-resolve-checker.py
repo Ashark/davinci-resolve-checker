@@ -96,7 +96,7 @@ else:
         lspci_devices = pickle.load(fp)
 
 print(local_str["chassis"], local_str.get(chassis_type, chassis_type))
-supported_mobile_chassis_types = ["Laptop", "Notebook", "Space-saving", "Convertible"]
+supported_mobile_chassis_types = ["Laptop", "Notebook", "Space-saving", "Convertible", "Portable"]
 if chassis_type != "Desktop" and chassis_type not in supported_mobile_chassis_types:
     print(local_str["unsupported chassis"])
     exit(1)
