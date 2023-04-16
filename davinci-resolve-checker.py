@@ -78,8 +78,8 @@ chassis_types = {
     "36": "Stick PC"
 }
 
-amd_codenames_progl_needed = ["Ellesmere"]
-amd_codenames_progl_not_needed = ["Vega", "Navi", "Cezanne"]
+amd_codenames_pre_vega = ["Ellesmere"]
+amd_codenames_vega_and_onward = ["Vega", "Navi", "Cezanne"]
 
 with open("/sys/class/dmi/id/chassis_type", 'r') as file:
     chassis_type = chassis_types[file.read().rstrip()]
@@ -192,16 +192,16 @@ if found_AMD_GPU:
         print(local_str["not running amdgpu driver, cannot run DR"])
         exit(1)
 
-    need_progl = "Unknown"
-    if any(codename in found_AMD_GPU.device.name for codename in amd_codenames_progl_needed):
-        need_progl = "True"
-    if any(codename in found_AMD_GPU.device.name for codename in amd_codenames_progl_not_needed):
-        need_progl = "False"
-    if need_progl == "Unknown":
+    is_pre_vega = "Unknown"
+    if any(codename in found_AMD_GPU.device.name for codename in amd_codenames_pre_vega):
+        is_pre_vega = "True"
+    if any(codename in found_AMD_GPU.device.name for codename in amd_codenames_vega_and_onward):
+        is_pre_vega = "False"
+    if is_pre_vega == "Unknown":
         print(local_str["amd codename undetectable"])
-        need_progl = "True"
+        is_pre_vega = "True"
 
-    if GL_VENDOR != "Advanced Micro Devices, Inc." and need_progl == "True":
+    if GL_VENDOR != "Advanced Micro Devices, Inc." and is_pre_vega == "True":
         # Note: If you run "progl glmark2", you see there "GL_VENDOR:     ATI Technologies Inc.",
         # but if you run "progl glxinfo", you always get "OpenGL vendor string: Advanced Micro Devices, Inc."
         # independently of you use X or Wayland; I+A, A+I or just AMD gpu in system.
@@ -209,7 +209,7 @@ if found_AMD_GPU:
         print(local_str["not using Pro OpenGL"])
         exit(1)
 
-    if need_progl == "True":
+    if is_pre_vega == "True":
         if not any(appropriate_driver in installed_opencl_drivers for appropriate_driver in ["opencl-amd", "opencl-legacy-amdgpu-pro"]):
             print(local_str["missing opencl driver"])
             exit(1)
