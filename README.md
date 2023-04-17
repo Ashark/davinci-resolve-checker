@@ -2,7 +2,7 @@
 [![platform](https://img.shields.io/badge/platform-linux-lightgrey.svg)](https://en.wikipedia.org/wiki/Linux)
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
 ![license](https://img.shields.io/github/license/Ashark/davinci-resolve-checker.svg)
-![checker version](https://img.shields.io/badge/checker_version-4.0.0-green.svg)
+![checker version](https://img.shields.io/badge/checker_version-5.0.0-green.svg)
 
 [![davinci-resolve aur version](https://img.shields.io/aur/version/davinci-resolve?label=davinci-resolve)](https://aur.archlinux.org/packages/davinci-resolve)
 [![davinci-resolve-studio aur version](https://img.shields.io/aur/version/davinci-resolve-studio?label=davinci-resolve-studio)](https://aur.archlinux.org/packages/davinci-resolve-studio)
@@ -70,17 +70,23 @@ Override this behavior by providing a `--locale xx_YY` argument to the script ca
 
 For AMD GPUs you have an option to force checks with proprietary stack (amdgpu-pro). For this, add `--pro` parameter:
 ```
-$ davinci-resolve-checker.py --pro
+$ ROC_ENABLE_PRE_VEGA=1 davinci-resolve-checker.py --pro -l en_US
 Using locale en_US
-DaVinci Resolve checker 4.0.0
+DaVinci Resolve checker 5.0.0
 Installed DaVinci Resolve package: davinci-resolve-studio 18.1.4-1
 Chassis type: desktop
-Installed OpenCL drivers: rocm-opencl-runtime
+Installed OpenCL drivers: opencl-amd
 Presented GPUs:
         Ellesmere [Radeon RX 470/480/570/570X/580/580X/590] (kernel driver in use: amdgpu)
         Navi 23 WKS-XL [Radeon PRO W6600] (kernel driver in use: amdgpu)
 OpenGL vendor string: AMD
 OpenGL renderer string: AMD Radeon RX 580 Series (polaris10, LLVM 15.0.7, DRM 3.49, 6.2.10-arch1-1)
+clinfo detected platforms and devices:
+        AMD Accelerated Parallel Processing (roc) (number of devices: 2)
+                AMD Radeon Pro W6600
+                AMD Radeon RX 580 Series
+        AMD Accelerated Parallel Processing (orca) (number of devices: 1)
+                AMD Radeon RX 580 Series
 
 You have several AMD GPUs. DR Studio can utilise several GPUs. Script will check if appropriate driver for your renderer GPU is used. But keep in mind that if you use prime offloading, than your primary gpu still need appropriate driver (script does not check it).
 You are not using Pro OpenGL implementation. Install amdgpu-pro-libgl and run DaVinci Resolve with progl prefix. Otherwise it will crash.

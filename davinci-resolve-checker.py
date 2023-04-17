@@ -8,6 +8,7 @@ from pylspci.parsers import VerboseParser
 import pickle
 import sys
 import os
+import json
 
 parser = argparse.ArgumentParser(description="Davinci Resolve checker")
 parser.add_argument(
@@ -27,7 +28,7 @@ local_str = local_strings.LocalStrings(preferred_locale=args.locale)
 
 print(local_str["locale"], local_str.locale)
 
-print(local_str["project name"], "4.0.0")  # When bumping, do not forget to also bump it in readme.
+print(local_str["project name"], "5.0.0")  # When bumping, do not forget to also bump it in readme.
 
 if distro.id() not in {"arch", "manjaro", "endeavouros", "garuda"}:
     print(local_str["you are running"], distro.name(), "(", distro.id(), ")", local_str["script not tested on distro"])
@@ -127,9 +128,41 @@ print(local_str["opengl vendor"], GL_VENDOR)
 
 GL_RENDERER = subprocess.run("glxinfo | grep -i 'OpenGL renderer' | cut -f2 -d ':' | xargs", shell=True, capture_output=True, text=True).stdout.strip()
 print("OpenGL renderer string: " + GL_RENDERER)  # Useful when there are several gpus, especially from one vendor
+print("clinfo detected platforms and devices:")
+found_ready_cl_gpu = False
+try:
+    clinfo_data = json.loads(subprocess.run('clinfo --json', shell=True, capture_output=True, text=True).stdout.strip())
+    cl_platform_index = len(clinfo_data["platforms"]) - 1
+    while cl_platform_index >= 0:
+        number_of_devices = len(clinfo_data["devices"][cl_platform_index]['online'])
+        platform_name = clinfo_data["platforms"][cl_platform_index]['CL_PLATFORM_NAME']
+        amd_platform_suffix = ""
+        if clinfo_data["platforms"][cl_platform_index]['CL_PLATFORM_ICD_SUFFIX_KHR'] == "AMD":
+            # I need to differentiate between orca and roc platforms somehow. They have the same platform name.
+            # The only difference I can see (at the moment of opencl-amd 5.4.3-3) is cl_amd_offline_devices in orca's extensions.
+            # I guess this check can be invalid for later versions. But now I will use it.
+            if 'cl_amd_offline_devices' in clinfo_data["platforms"][cl_platform_index]['CL_PLATFORM_EXTENSIONS']:
+                amd_platform_suffix = " (orca)"
+            else:
+                amd_platform_suffix = " (roc)"
+        print("\t" + platform_name + amd_platform_suffix + " (number of devices: " + str(number_of_devices) + ")")
+
+        if platform_name != "Clover" and number_of_devices > 0:
+            found_ready_cl_gpu = True
+
+        if clinfo_data["platforms"][cl_platform_index]['CL_PLATFORM_ICD_SUFFIX_KHR'] == "AMD":
+            while number_of_devices - 1 >= 0:
+                print("\t\t" + clinfo_data["devices"][cl_platform_index]['online'][number_of_devices - 1]['CL_DEVICE_BOARD_NAME_AMD'])
+                number_of_devices -= 1
+
+        cl_platform_index -= 1
+except:
+    print("\tWarning: could not parse clinfo data!")
 
 print("")  # Empty line, to separate verdict from configuration info.
-
+if not found_ready_cl_gpu:
+    print("Not found opencl platforms with appropriate GPUs. Check that you have installed corresponding driver. Otherwise you cannot run DR.")
+    exit(1)
 if GL_VENDOR == "":
     print(local_str["missing opengl vendor"])
     exit(1)
@@ -209,22 +242,23 @@ if found_AMD_GPU:
         is_pre_vega = "True"
 
     if args.pro_stack == True:
-        if GL_VENDOR != "Advanced Micro Devices, Inc." and is_pre_vega == "True":
+        if is_pre_vega == "False":
+            print("Warning: Running pro stack on modern gpu?")  # TODO translations
+
+        if GL_VENDOR != "Advanced Micro Devices, Inc.":
             # Note: If you run "progl glmark2", you see there "GL_VENDOR:     ATI Technologies Inc.",
             # but if you run "progl glxinfo", you always get "OpenGL vendor string: Advanced Micro Devices, Inc."
             # independently of you use X or Wayland; I+A, A+I or just AMD gpu in system.
             # So we check if it is "Advanced Micro Devices, Inc.".
             print(local_str["not using Pro OpenGL"])
             exit(1)
-        else:
-            print("Warning: Running pro stack on modern gpu?")  # TODO translations
 
         if is_pre_vega == "True":
             if not any(appropriate_driver in installed_opencl_drivers for appropriate_driver in ["opencl-amd", "opencl-legacy-amdgpu-pro"]):
                 print(local_str["missing opencl driver"])
                 exit(1)
         else:
-            if not any(appropriate_driver in installed_opencl_drivers for appropriate_driver in ["opencl-amd", "rocm-opencl-runtime"]):
+            if not any(appropriate_driver in installed_opencl_drivers for appropriate_driver in ["opencl-amd"]):
                 print(local_str["missing opencl driver"])
                 exit(1)
 
@@ -236,6 +270,8 @@ if found_AMD_GPU:
         if opencl_amd_version != andgpu_pro_libgl_version:
             print(local_str["opencl-amd and progl versions mismatch"] % (opencl_amd_version, andgpu_pro_libgl_version))
     else:  # do not want pro stack
+        # TODO Test if DR can actually work when one GPU is renderer and another is cl.
+        # Currently 18.1.4-1 it crashes when I run as OCL_ICD_VENDORS=/home/me/ocl/roc-only/ davinci-resolve when there are two AMD and primary is pre-vega.
         if is_pre_vega:
             if os.environ.get('ROC_ENABLE_PRE_VEGA', "0") != "1":
                 print("You should use ROC_ENABLE_PRE_VEGA=1 environment variable. Otherwise use pro stack.")  # TODO translations
