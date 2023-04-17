@@ -209,22 +209,23 @@ if found_AMD_GPU:
         is_pre_vega = "True"
 
     if args.pro_stack == True:
-        if GL_VENDOR != "Advanced Micro Devices, Inc." and is_pre_vega == "True":
+        if is_pre_vega == "False":
+            print("Warning: Running pro stack on modern gpu?")  # TODO translations
+
+        if GL_VENDOR != "Advanced Micro Devices, Inc.":
             # Note: If you run "progl glmark2", you see there "GL_VENDOR:     ATI Technologies Inc.",
             # but if you run "progl glxinfo", you always get "OpenGL vendor string: Advanced Micro Devices, Inc."
             # independently of you use X or Wayland; I+A, A+I or just AMD gpu in system.
             # So we check if it is "Advanced Micro Devices, Inc.".
             print(local_str["not using Pro OpenGL"])
             exit(1)
-        else:
-            print("Warning: Running pro stack on modern gpu?")  # TODO translations
 
         if is_pre_vega == "True":
             if not any(appropriate_driver in installed_opencl_drivers for appropriate_driver in ["opencl-amd", "opencl-legacy-amdgpu-pro"]):
                 print(local_str["missing opencl driver"])
                 exit(1)
         else:
-            if not any(appropriate_driver in installed_opencl_drivers for appropriate_driver in ["opencl-amd", "rocm-opencl-runtime"]):
+            if not any(appropriate_driver in installed_opencl_drivers for appropriate_driver in ["opencl-amd"]):
                 print(local_str["missing opencl driver"])
                 exit(1)
 
@@ -236,6 +237,8 @@ if found_AMD_GPU:
         if opencl_amd_version != andgpu_pro_libgl_version:
             print(local_str["opencl-amd and progl versions mismatch"] % (opencl_amd_version, andgpu_pro_libgl_version))
     else:  # do not want pro stack
+        # TODO Test if DR can actually work when one GPU is renderer and another is cl.
+        # Currently 18.1.4-1 it crashes when I run as OCL_ICD_VENDORS=/home/me/ocl/roc-only/ davinci-resolve when there are two AMD and primary is pre-vega.
         if is_pre_vega:
             if os.environ.get('ROC_ENABLE_PRE_VEGA', "0") != "1":
                 print("You should use ROC_ENABLE_PRE_VEGA=1 environment variable. Otherwise use pro stack.")  # TODO translations
