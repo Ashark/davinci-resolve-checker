@@ -28,7 +28,7 @@ local_str = local_strings.LocalStrings(preferred_locale=args.locale)
 
 print(local_str["locale"], local_str.locale)
 
-print(local_str["project name"], "5.0.0")
+print(local_str["project name"], "5.1.0")
 
 if distro.id() not in {"arch", "manjaro", "endeavouros", "garuda"}:
     print(local_str["you are running"], distro.name(), "(", distro.id(), ")", local_str["script not tested on distro"])
@@ -92,7 +92,7 @@ amd_codenames_vega_and_onward = ["Vega", "Navi", "Cezanne"]
 with open("/sys/class/dmi/id/chassis_type", 'r') as file:
     chassis_type = chassis_types[file.read().rstrip()]
 
-installed_opencl_drivers = subprocess.run("expac -Qs '%n' opencl-driver", shell=True, capture_output=True, text=True).stdout.splitlines()
+installed_opencl_drivers = subprocess.run("expac -Qs '%n %v' opencl-driver", shell=True, capture_output=True, text=True).stdout.splitlines()
 installed_opencl_nvidia_package = subprocess.run("expac -Qs '%n' opencl-nvidia", shell=True, capture_output=True, text=True).stdout.rstrip('\n')
 
 debugging_with_pickled_lspci = False  # turn to true if want to debug somebody's lspci dump.
@@ -108,7 +108,12 @@ supported_mobile_chassis_types = ["Laptop", "Notebook", "Space-saving", "Convert
 if chassis_type != "Desktop" and chassis_type not in supported_mobile_chassis_types:
     print(local_str["unsupported chassis"])
     exit(1)
-print(local_str["openCL drivers"], " ".join([str(x) for x in installed_opencl_drivers]))
+print(local_str["openCL drivers"])
+if len(installed_opencl_drivers) == 0:
+    print("Not found any package that provides opencl-driver")  # TODO translate
+else:
+    print("\t" + "\n\t".join([str(x) for x in installed_opencl_drivers]))
+installed_opencl_drivers = [x.split(" ")[0] for x in installed_opencl_drivers]
 
 # Now we are going to check which GPUs are presented in system.
 # According to this link: https://pci-ids.ucw.cz/read/PD/03
