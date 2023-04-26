@@ -28,7 +28,7 @@ local_str = local_strings.LocalStrings(preferred_locale=args.locale)
 
 print(local_str["locale"], local_str.locale)
 
-print(local_str["project name"], "5.1.0")
+print(local_str["project name"], "5.2.0")
 
 if distro.id() not in {"arch", "manjaro", "endeavouros", "garuda"}:
     print(local_str["you are running"], distro.name(), "(", distro.id(), ")", local_str["script not tested on distro"])
@@ -279,15 +279,17 @@ if found_AMD_GPU:
         # Currently 18.1.4-1 it crashes when I run as OCL_ICD_VENDORS=/home/me/ocl/roc-only/ davinci-resolve when there are two AMD and primary is pre-vega.
         if is_pre_vega:
             if os.environ.get('ROC_ENABLE_PRE_VEGA', "0") != "1":
-                print("You should use ROC_ENABLE_PRE_VEGA=1 environment variable. Otherwise use pro stack.")  # TODO translations
+                print("You should use ROC_ENABLE_PRE_VEGA=1 environment variable. Otherwise use pro stack (run checker with --pro), because legacy opencl requires progl to work.")  # TODO translations
                 exit(1)
 
-        if not any(appropriate_driver in installed_opencl_drivers for appropriate_driver in ["rocm-opencl-runtime"]):
-            print("missing rocm-opencl-runtime opencl driver")  # TODO translations
+        if not any(appropriate_driver in installed_opencl_drivers for appropriate_driver in ["rocm-opencl-runtime", "opencl-amd"]):
+            print("Missing opencl-driver for amd. It is recommended to install rocm-opencl-runtime.")  # TODO translations
             exit(1)
-        # TODO Check also that legacy stack is not interfering (uninstalled opencl-amd). Or if that should be offline.
-
-    print(local_str["good to run DR"])
+        elif "opencl-amd" in installed_opencl_drivers:
+            print("Package opencl-amd contains both implementations for amd: legacy orca and modern rocm. But DR crashes when it sees both (no bug report for this yet). And currently the opencl loader does not support specifying specific icd file, see https://github.com/OCL-dev/ocl-icd/issues/7#issuecomment-1522941979. So currently it is recommended to install rocm-opencl-runtime instead of opencl-amd.")  # TODO translations
+            exit(1)
+        elif "rocm-opencl-runtime" in installed_opencl_drivers:
+            print(local_str["good to run DR"])
 
 if found_NVIDIA_GPU:
     # I have tested it with DR 16.2.3 and found out that BMD have fixed that issue. See https://www.youtube.com/watch?v=NdOGFBHEnkU
