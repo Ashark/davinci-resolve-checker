@@ -28,7 +28,7 @@ local_str = local_strings.LocalStrings(preferred_locale=args.locale)
 
 print(local_str["locale"], local_str.locale)
 
-print(local_str["project name"], "5.2.0")
+print(local_str["project name"], "5.2.1")
 
 if distro.id() not in {"arch", "manjaro", "endeavouros", "garuda"}:
     print(local_str["you are running"], distro.name(), "(", distro.id(), ")", local_str["script not tested on distro"])
@@ -158,6 +158,10 @@ try:
         if clinfo_data["platforms"][cl_platform_index]['CL_PLATFORM_ICD_SUFFIX_KHR'] == "AMD":
             while number_of_devices - 1 >= 0:
                 print("\t\t" + clinfo_data["devices"][cl_platform_index]['online'][number_of_devices - 1]['CL_DEVICE_BOARD_NAME_AMD'])
+                number_of_devices -= 1
+        elif clinfo_data["platforms"][cl_platform_index]['CL_PLATFORM_ICD_SUFFIX_KHR'] == "MESA":
+            while number_of_devices - 1 >= 0:
+                print("\t\t" + clinfo_data["devices"][cl_platform_index]['online'][number_of_devices - 1]['CL_DEVICE_NAME'])
                 number_of_devices -= 1
 
         cl_platform_index -= 1
