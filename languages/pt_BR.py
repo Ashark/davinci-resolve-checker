@@ -34,4 +34,9 @@ local_str = {
     "opencl-amd and progl versions mismatch": "Aviso: as versões opencl-amd (%s) e amdgpu-pro-libgl (%s) não correspondem.",
     "skipping vfio binded gpu": "A GPU %s tem um driver vfio-pci vinculado, ignorando-o de outras verificações.",
     "amd codename undetectable": "Aviso: não encontrou sua GPU na lista de nomes de codinome.Supondo que seja a GPU antiga que exija progl.Se isso for falso, informe.",
+    "not found any opencl-driver": "Não foi encontrado nenhum pacote que forneça opencl-driver.",
+    "missing opencl-driver for amd": "Driver opencl ausente para GPU AMD. Recomenda-se instalar o rocm-opencl-runtime.",
+    "use rocm only instead of opencl-amd": "O pacote opencl-amd contém ambas as implementações para amd: legacy orca e modern rocm. Mas o DR trava quando vê os dois (nenhum relatório de bug para isso ainda). E atualmente o carregador opencl não suporta a especificação de arquivo icd específico, consulte https://github.com/OCL-dev/ocl-icd/issues/7#issuecomment-1522941979. Atualmente, é recomendável instalar o rocm-opencl-runtime em vez do opencl-amd.",
+    "use roc_enable_pre_vega or use pro stack": "Você deve usar a variável de ambiente ROC_ENABLE_PRE_VEGA=1. Caso contrário, use pro stack (execute o verificador com --pro), porque o legado opencl requer progl para funcionar.",
+    "pro stack on modern gpu": "Aviso: não há razão para executar o pro stack na GPU moderna.",
 }

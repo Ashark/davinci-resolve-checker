@@ -28,7 +28,7 @@ local_str = local_strings.LocalStrings(preferred_locale=args.locale)
 
 print(local_str["locale"], local_str.locale)
 
-print(local_str["project name"], "5.2.1")
+print(local_str["project name"], "5.2.2")
 
 if distro.id() not in {"arch", "manjaro", "endeavouros", "garuda"}:
     print(local_str["you are running"], distro.name(), "(", distro.id(), ")", local_str["script not tested on distro"])
@@ -110,7 +110,7 @@ if chassis_type != "Desktop" and chassis_type not in supported_mobile_chassis_ty
     exit(1)
 print(local_str["openCL drivers"])
 if len(installed_opencl_drivers) == 0:
-    print("Not found any package that provides opencl-driver")  # TODO translate
+    print(local_str["not found any opencl-driver"])
 else:
     print("\t" + "\n\t".join([str(x) for x in installed_opencl_drivers]))
 installed_opencl_drivers = [x.split(" ")[0] for x in installed_opencl_drivers]
@@ -252,7 +252,7 @@ if found_AMD_GPU:
 
     if args.pro_stack == True:
         if is_pre_vega == "False":
-            print("Warning: Running pro stack on modern gpu?")  # TODO translations
+            print(local_str["pro stack on modern gpu"])
 
         if GL_VENDOR != "Advanced Micro Devices, Inc.":
             # Note: If you run "progl glmark2", you see there "GL_VENDOR:     ATI Technologies Inc.",
@@ -283,14 +283,14 @@ if found_AMD_GPU:
         # Currently 18.1.4-1 it crashes when I run as OCL_ICD_VENDORS=/home/me/ocl/roc-only/ davinci-resolve when there are two AMD and primary is pre-vega.
         if is_pre_vega:
             if os.environ.get('ROC_ENABLE_PRE_VEGA', "0") != "1":
-                print("You should use ROC_ENABLE_PRE_VEGA=1 environment variable. Otherwise use pro stack (run checker with --pro), because legacy opencl requires progl to work.")  # TODO translations
+                print(local_str["use roc_enable_pre_vega or use pro stack"])
                 exit(1)
 
         if not any(appropriate_driver in installed_opencl_drivers for appropriate_driver in ["rocm-opencl-runtime", "opencl-amd"]):
-            print("Missing opencl-driver for amd. It is recommended to install rocm-opencl-runtime.")  # TODO translations
+            print(local_str["missing opencl-driver for amd"])
             exit(1)
         elif "opencl-amd" in installed_opencl_drivers:
-            print("Package opencl-amd contains both implementations for amd: legacy orca and modern rocm. But DR crashes when it sees both (no bug report for this yet). And currently the opencl loader does not support specifying specific icd file, see https://github.com/OCL-dev/ocl-icd/issues/7#issuecomment-1522941979. So currently it is recommended to install rocm-opencl-runtime instead of opencl-amd.")  # TODO translations
+            print(local_str["use rocm only instead of opencl-amd"])
             exit(1)
         elif "rocm-opencl-runtime" in installed_opencl_drivers:
             print(local_str["good to run DR"])

@@ -1,4 +1,3 @@
-# Language is Chinese Simplified
 local_str = {
     "locale": "使用语言环境:",
     "project name": "达芬奇调色检测工具",
@@ -35,4 +34,9 @@ local_str = {
     "opencl-amd and progl versions mismatch": "警告：opencl-amd (%s) 和 amdgpu-pro-libgl (%s) 版本不匹配。",
     "skipping vfio binded gpu": "GPU %s 绑定了 vfio-pci 驱动程序，将其从进一步检查中跳过。",
     "amd codename undetectable": "警告：未在代号列表中找到您的GPU。假设它是旧的GPU需要progl。如果那是不真实的，请报告。",
+    "not found any opencl-driver": "未找到任何提供 opencl-driver 的软件包。",
+    "missing opencl-driver for amd": "缺少 AMD GPU 的 opencl 驱动程序。建议安装 rocm-opencl-runtime。",
+    "use rocm only instead of opencl-amd": "软件包 opencl-amd 包含 amd 的两个实现：旧版 orca 和现代 rocm。但是当它看到两者时 DR 会崩溃（目前还没有错误报告）。目前 opencl 加载器不支持指定特定的 icd 文件，请参见 https://github.com/OCL-dev/ocl-icd/issues/7#issuecomment-1522941979。所以目前推荐安装 rocm-opencl-runtime 而不是 opencl-amd。",
+    "use roc_enable_pre_vega or use pro stack": "您应该使用 ROC_ENABLE_PRE_VEGA=1 环境变量。否则使用 pro stack（使用 --pro 运行检查器），因为旧版 opencl 需要 progl 才能工作。",
+    "pro stack on modern gpu": "警告：没有理由在现代 gpu 上运行 pro stack。",
 }
