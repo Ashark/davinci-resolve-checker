@@ -28,7 +28,7 @@ local_str = local_strings.LocalStrings(preferred_locale=args.locale)
 
 print(local_str["locale"], local_str.locale)
 
-print(local_str["project name"], "5.2.2")
+print(local_str["project name"], "5.2.3")
 
 if distro.id() not in {"arch", "manjaro", "endeavouros", "garuda"}:
     print(local_str["you are running"], distro.name(), "(", distro.id(), ")", local_str["script not tested on distro"])
@@ -171,7 +171,7 @@ except:
 print("")  # Empty line, to separate verdict from configuration info.
 if not found_ready_cl_gpu:
     print("Not found opencl platforms with appropriate GPUs. Check that you have installed corresponding driver. Otherwise you cannot run DR.")
-    exit(1)
+    # do not exit here, to give a chance to show message when ROC_ENABLE_PRE_VEGA=1 variable needed on AMD.
 if GL_VENDOR == "":
     print(local_str["missing opengl vendor"])
     exit(1)
