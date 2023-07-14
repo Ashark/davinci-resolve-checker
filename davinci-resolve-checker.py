@@ -28,7 +28,7 @@ local_str = local_strings.LocalStrings(preferred_locale=args.locale)
 
 print(local_str["locale"], local_str.locale)
 
-print(local_str["project name"], "5.2.3")
+print(local_str["project name"], "5.2.4")
 
 if distro.id() not in {"arch", "manjaro", "endeavouros", "garuda"}:
     print(local_str["you are running"], distro.name(), "(", distro.id(), ")", local_str["script not tested on distro"])
@@ -87,7 +87,7 @@ chassis_types = {
 }
 
 amd_codenames_pre_vega = ["Ellesmere"]
-amd_codenames_vega_and_onward = ["Vega", "Navi", "Cezanne"]
+amd_codenames_vega_and_onward = ["Vega", "Navi", "Cezanne", "Raphael"]
 
 with open("/sys/class/dmi/id/chassis_type", 'r') as file:
     chassis_type = chassis_types[file.read().rstrip()]
@@ -243,12 +243,12 @@ if found_AMD_GPU:
 
     is_pre_vega = "Unknown"
     if any(codename in found_AMD_GPU.device.name for codename in amd_codenames_pre_vega):
-        is_pre_vega = "True"
+        is_pre_vega = True
     if any(codename in found_AMD_GPU.device.name for codename in amd_codenames_vega_and_onward):
-        is_pre_vega = "False"
+        is_pre_vega = False
     if is_pre_vega == "Unknown":
         print(local_str["amd codename undetectable"])
-        is_pre_vega = "True"
+        is_pre_vega = True
 
     if args.pro_stack == True:
         if is_pre_vega == "False":
