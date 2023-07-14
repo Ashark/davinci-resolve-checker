@@ -30,7 +30,7 @@ If script detects configuration problem, it suggests how to solve it.
 
 * Clone this repository.
 * Install required dependencies:  
-`sudo pacman -S expac mesa-demos python-distro`
+`sudo pacman -S expac mesa-utils python-distro`
 * Install other required dependencies from aur (assuming you use yay):  
 `yay -S python-pylspci`
 

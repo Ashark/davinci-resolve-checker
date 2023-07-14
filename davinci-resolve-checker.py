@@ -28,13 +28,13 @@ local_str = local_strings.LocalStrings(preferred_locale=args.locale)
 
 print(local_str["locale"], local_str.locale)
 
-print(local_str["project name"], "5.2.4")
+print(local_str["project name"], "5.2.5")
 
 if distro.id() not in {"arch", "manjaro", "endeavouros", "garuda"}:
     print(local_str["you are running"], distro.name(), "(", distro.id(), ")", local_str["script not tested on distro"])
     exit(1)
 
-dependencies_check = subprocess.run("pacman -Q expac mesa-demos python-distro", shell=True, capture_output=True, text=True)
+dependencies_check = subprocess.run("pacman -Q expac mesa-utils python-distro", shell=True, capture_output=True, text=True)
 if dependencies_check.returncode != 0:
     print(dependencies_check.stderr.strip())
     exit(1)
