@@ -28,7 +28,7 @@ local_str = local_strings.LocalStrings(preferred_locale=args.locale)
 
 print(local_str["locale"], local_str.locale)
 
-print(local_str["project name"], "5.2.5")
+print(local_str["project name"], "5.2.6")
 
 if distro.id() not in {"arch", "manjaro", "endeavouros", "garuda"}:
     print(local_str["you are running"], distro.name(), "(", distro.id(), ")", local_str["script not tested on distro"])
@@ -105,7 +105,8 @@ else:
 
 print(local_str["chassis"], local_str.get(chassis_type, chassis_type))
 supported_mobile_chassis_types = ["Laptop", "Notebook", "Space-saving", "Convertible", "Portable"]
-if chassis_type != "Desktop" and chassis_type not in supported_mobile_chassis_types:
+supported_desktop_chassis_types = ["Desktop", "All in One", "Tower"]
+if chassis_type not in supported_desktop_chassis_types and chassis_type not in supported_mobile_chassis_types:
     print(local_str["unsupported chassis"])
     exit(1)
 print(local_str["openCL drivers"])
