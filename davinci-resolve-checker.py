@@ -28,9 +28,9 @@ local_str = local_strings.LocalStrings(preferred_locale=args.locale)
 
 print(local_str["locale"], local_str.locale)
 
-print(local_str["project name"], "5.2.7")
+print(local_str["project name"], "5.2.8")
 
-if distro.id() not in {"arch", "manjaro", "endeavouros", "garuda"}:
+if distro.id() not in {"arch", "manjaro", "endeavouros", "garuda", "cachyos"}:
     print(local_str["you are running"], distro.name(), "(", distro.id(), ")", local_str["script not tested on distro"])
     exit(1)
 
