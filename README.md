@@ -1,4 +1,5 @@
 # DaVinci Resolve Checker
+
 [![platform](https://img.shields.io/badge/platform-linux-lightgrey.svg)](https://en.wikipedia.org/wiki/Linux)
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
 ![license](https://img.shields.io/github/license/Ashark/davinci-resolve-checker.svg)
@@ -21,18 +22,18 @@ If script detects configuration problem, it suggests how to solve it.
 
 ## Supported distributions:
 
-* Arch Linux
-* EndeavourOS
-* Garuda Linux
-* Manjaro Linux
+- Arch Linux
+- EndeavourOS
+- Garuda Linux
+- Manjaro Linux
 
 ## Installation:
 
-* Clone this repository.
-* Install required dependencies:  
-`sudo pacman -S expac mesa-utils python-distro`
-* Install other required dependencies from aur (assuming you use yay):  
-`yay -S python-pylspci`
+- Clone this repository.
+- Install required dependencies:  
+  `sudo pacman -S expac mesa-utils python-distro`
+- Install other required dependencies from aur (assuming you use yay):  
+  `yay -S python-pylspci`
 
 Python modules could be alternatively installed with pip:  
 `pip install distro`
@@ -45,6 +46,7 @@ For example, if using Nvidia Optimus laptop, you probably use prime-run, so run:
 `prime-run ./davinci-resolve-checker.py`
 
 The output of the script should be the following:
+
 ```
 DaVinci Resolve checker 1.4.1
 ...
@@ -52,6 +54,7 @@ All seems good. You should be able to run DaVinci Resolve successfully.
 ```
 
 If you have some problem, the script will tell you what is wrong with your configuration, for example:
+
 ```
 DaVinci Resolve checker 1.4.1
 Chassis type: desktop
@@ -69,6 +72,7 @@ The script will use the locale set in your machine to display messages in your p
 Override this behavior by providing a `--locale xx_YY` argument to the script call. Example: `--locale pt_BR` for Brazilian Portuguese, or `--locale zh_CN` for Simplified Chinese.
 
 For AMD GPUs you have an option to force checks with proprietary stack (amdgpu-pro). For this, add `--pro` parameter:
+
 ```
 $ ROC_ENABLE_PRE_VEGA=1 davinci-resolve-checker.py --pro -l en_US
 Using locale en_US
@@ -100,11 +104,12 @@ If you have find some error or want to ask for a feature, open a new issue and d
 
 Currently, this script displays messages in these locales:
 
-* `en_US` - English, United States
-* `it_IT` - Italian
-* `pt_BR` - Portiguese, Brazil
-* `ru_RU` - Russian, Russian Federation
-* `zh_CN` - Chinese, Simplified
+- `en_US` - English, United States
+- `it_IT` - Italian
+- `de_DE` - German, Germany
+- `pt_BR` - Portiguese, Brazil
+- `ru_RU` - Russian, Russian Federation
+- `zh_CN` - Chinese, Simplified
 
 To contribute translating the script, add a locale file to the `languages/` directory. Use the `en_US.py` file as a reference.
 
