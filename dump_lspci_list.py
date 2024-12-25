@@ -6,7 +6,8 @@
 import pickle
 
 from pylspci.parsers import VerboseParser
+
 lspci_devices = VerboseParser().run()
 
-with open("lspci_devices_dump.bin", "wb") as fp:   #Pickling
+with open("lspci_devices_dump.bin", "wb") as fp:  # Pickling
     pickle.dump(lspci_devices, fp)

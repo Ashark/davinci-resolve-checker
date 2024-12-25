@@ -1,7 +1,9 @@
 # This script is used in https://badgen.net/https/ashark.npkn.net/f1a682 to generate version badge.
 # See how it works here: https://css-tricks.com/adding-custom-github-badges-to-your-repo/
 
-from napkin import response  # Note that it is available only in browser in napkin website
+from napkin import (
+    response,
+)  # Note that it is available only in browser in napkin website
 import re
 import requests
 import json
@@ -11,7 +13,7 @@ file_content = requests.get(url).text
 
 version = "Undetected"
 
-for line in file_content.split('\n'):
+for line in file_content.split("\n"):
     if "project name" in line:
         version = line
         break
@@ -24,7 +26,9 @@ result = """{{
   "color": "green",
   "status": "{v}",
   "subject": "checker version"
-}}""".format(v=version)
+}}""".format(
+    v=version
+)
 
 # print(result)
 j = json.loads(result)
