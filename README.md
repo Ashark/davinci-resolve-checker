@@ -30,14 +30,14 @@ If script detects configuration problem, it suggests how to solve it.
 ## Installation:
 
 - Clone this repository.
-- Install required dependencies:  
-  `sudo pacman -S expac mesa-utils python-distro`
-- Install other required dependencies from aur (assuming you use yay):  
-  `yay -S python-pylspci`
-
-Python modules could be alternatively installed with pip:  
-`pip install distro`
-`pip install pylspci`
+- Install system-wide dependencies:
+  `sudo pacman -S expac mesa-utils`
+- Create a Python virtual environment:
+  `python -m venv .venv`
+- Activate the virtual environment:
+  `source .venv/bin/activate`
+- Install Python dependencies:
+  `pip install -r requirements.txt`
 
 ## Usage:
 

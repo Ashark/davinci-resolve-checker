@@ -14,7 +14,7 @@ local_str = {
     "kernel driver": "driver del kernel in uso:",
     "opengl vendor": "fornitore del driver OpenGL:",
     "missing opengl vendor": "Impossibile trovare il fornitore del driver OpenGL. Probabilmente stai tentando di utilizzare AMD Pro OpenGL mentre la tua GPU primaria è Intel. E' possibile che tu stia lanciando lo script da ssh.",
-    "should uninstall opencl-mesa": "Dovresti disinstallare opencl-mesa. Altrimenti DR (v17.1.1) andrà in errore: \"l'immagine è corrotta\". Se togli la spunta dalla casella \"gpu\" nelle impostazioni e riavvi DR, tutta la sessione desktop si corromperà e potrai soloamente riavviare il tuo PC. Almeno questo è quanto accaduto con alcune GPU AMD.",
+    "should uninstall opencl-mesa": 'Dovresti disinstallare opencl-mesa. Altrimenti DR (v17.1.1) andrà in errore: "l\'immagine è corrotta". Se togli la spunta dalla casella "gpu" nelle impostazioni e riavvi DR, tutta la sessione desktop si corromperà e potrai soloamente riavviare il tuo PC. Almeno questo è quanto accaduto con alcune GPU AMD.',
     "several intel gpus": "Ho rilevato molteplici GPUs INTEL. Sono confuso. Stai usando una scheda madre multi-CPU? Oppure con igpu intel + dgpu intel?",
     "several amd gpus": "Ho rilevato diverse GPUs AMD. Solo DR Studio può utilizzare diverse GPU. Verificherò se viene utilizzato il driver appropriato per la GPU del renderer. Ma tieni presente che se usi prime offload la tua GPU primaria potrebbe avere ancora bisogno di un driver appropriato (Io non lo controllo).",
     "several nvidia gpus": "Ho rilevato svariate GPUs NVIDIA. Sono confuso. Quale intendi utilizzare?",
