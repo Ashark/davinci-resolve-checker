@@ -5,7 +5,7 @@ local_str = {
     "script not tested on distro": "but this script was not tested on it.",
     "which DR package": "Installed DaVinci Resolve package:",
     "chassis": "Chassis type:",
-    "unsupported chassis": "Warning: you chassis type is not supported by the script. Please report your case.",
+    "unsupported chassis": "Warning: your chassis type is not supported by the script. Please report your case.",
     "Notebook": "notebook",
     "Laptop": "laptop",
     "Desktop": "desktop",

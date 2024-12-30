@@ -105,7 +105,7 @@ else:
 
 print(local_str["chassis"], local_str.get(chassis_type, chassis_type))
 supported_mobile_chassis_types = ["Laptop", "Notebook", "Space-saving", "Convertible", "Portable"]
-supported_desktop_chassis_types = ["Desktop", "All in One", "Tower", "Other"]  # "Other" is a VM, so treat it as a desktop.
+supported_desktop_chassis_types = ["Desktop", "All in One", "Mini PC", "Tower", "Other"]  # "Other" is a VM, so treat it as a desktop.
 if chassis_type not in supported_desktop_chassis_types and chassis_type not in supported_mobile_chassis_types:
     print(local_str["unsupported chassis"])
     exit(1)
