@@ -35,10 +35,6 @@ If script detects configuration problem, it suggests how to solve it.
 - Install other required dependencies from aur (assuming you use yay):  
   `yay -S python-pylspci`
 
-Python modules could be alternatively installed with pip:  
-`pip install distro`
-`pip install pylspci`
-
 ## Usage:
 
 Run the script with the same parameters as you intend to launch D.R.

@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
 
 import argparse
-import distro
 import subprocess
 import local_strings
-from pylspci.parsers import VerboseParser
 import pickle
 import sys
 import os
@@ -28,20 +26,19 @@ local_str = local_strings.LocalStrings(preferred_locale=args.locale)
 
 print(local_str["locale"], local_str.locale)
 
-print(local_str["project name"], "5.2.8")
+print(local_str["project name"], "5.2.9")
+
+dependencies_check = subprocess.run("pacman -Q expac mesa-utils python-distro python-pylspci", shell=True, capture_output=True, text=True)
+if dependencies_check.returncode != 0:
+    print(dependencies_check.stderr.strip())
+    exit(1)
+
+import distro
+from pylspci.parsers import VerboseParser
 
 if distro.id() not in {"arch", "manjaro", "endeavouros", "garuda", "cachyos"}:
     print(local_str["you are running"], distro.name(), "(", distro.id(), ")", local_str["script not tested on distro"])
     exit(1)
-
-dependencies_check = subprocess.run("pacman -Q expac mesa-utils python-distro", shell=True, capture_output=True, text=True)
-if dependencies_check.returncode != 0:
-    print(dependencies_check.stderr.strip())
-    exit(1)
-for module in "pylspci", "distro":
-    if module not in sys.modules:
-        print("Missing " + module)
-        exit(1)
 
 installed_dr_package = subprocess.run("expac -Qs '%n %v' davinci-resolve", shell=True, capture_output=True, text=True).stdout.rstrip('\n')
 print(local_str["which DR package"], installed_dr_package)
