@@ -26,9 +26,9 @@ local_str = local_strings.LocalStrings(preferred_locale=args.locale)
 
 print(local_str["locale"], local_str.locale)
 
-print(local_str["project name"], "5.2.9")
+print(local_str["project name"], "5.3.0")
 
-dependencies_check = subprocess.run("pacman -Q expac mesa-utils python-distro python-pylspci", shell=True, capture_output=True, text=True)
+dependencies_check = subprocess.run("pacman -Q expac mesa-utils python-distro python-pylspci clinfo", shell=True, capture_output=True, text=True)
 if dependencies_check.returncode != 0:
     print(dependencies_check.stderr.strip())
     exit(1)
