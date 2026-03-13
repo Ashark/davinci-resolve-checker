@@ -26,7 +26,7 @@ local_str = local_strings.LocalStrings(preferred_locale=args.locale)
 
 print(local_str["locale"], local_str.locale)
 
-print(local_str["project name"], "5.3.0")
+print(local_str["project name"], "5.3.1")
 
 dependencies_check = subprocess.run("pacman -Q expac mesa-utils python-distro python-pylspci clinfo", shell=True, capture_output=True, text=True)
 if dependencies_check.returncode != 0:
@@ -84,7 +84,7 @@ chassis_types = {
 }
 
 amd_codenames_pre_vega = ["Ellesmere"]
-amd_codenames_vega_and_onward = ["Vega", "Navi", "Cezanne", "Raphael", "Barcelo"]
+amd_codenames_vega_and_onward = ["Vega", "Navi", "Cezanne", "Raphael", "Barcelo", "Rembrandt"]
 
 with open("/sys/class/dmi/id/chassis_type", 'r') as file:
     chassis_type = chassis_types[file.read().rstrip()]
